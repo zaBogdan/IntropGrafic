@@ -1,0 +1,7 @@
+[submodule "SDL-mirror"]
+	path = SDL-mirror
+	url = https://github.com/spurious/SDL-mirror
+	branch = release-2.0.12
+[submodule "SDL_bgi-2.4.2"]
+	path = SDL_bgi-2.4.2
+	url = https://github.com/AntohiRobert/SDL_bgi-2.4.2
