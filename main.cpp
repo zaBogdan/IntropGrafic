@@ -1,7 +1,7 @@
 #include <iostream>
 #define SDL_MAIN_HANDLED
-#include <SDL.h>
 #include <graphics.h>
+#include "eval/readFunction.h"
 
 int example3()
 {
@@ -15,6 +15,8 @@ int example3()
 //int argc, char* args[]
 
 int main() {
-    example3();
+//    example3();
+    string func = readFunction();
+    checkSyntax(func);
     return 0;
 }

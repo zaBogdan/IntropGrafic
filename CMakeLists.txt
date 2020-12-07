@@ -15,7 +15,7 @@ include_directories(src)
 add_library(sdl-bgi STATIC ${SOURCES})
 target_link_libraries(sdl-bgi sdl)
 
-add_executable(main main.cpp)
+add_executable(main main.cpp eval/readFunction.cpp eval/readFunction.h)
 target_link_libraries(main sdl-bgi sdl)
 
 #target_link_libraries(sdl-static SDL2main SDL2-static)
