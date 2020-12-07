@@ -6,18 +6,23 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <vector>
+#include <stack>
+#include <algorithm>
+#include <queue>
 #define type string
 using namespace std;
 
-enum priorityOperators{
-    plus = 0,
-    subtraction = 0,
-    multiply = 2,
-    division = 2,
-};
+const int mathFunctionsCounter = 23;
+const char mathematicalFunctions[25][10] = {"abs","acos","asin","atan","cbrt","ceil","cos","cosh","exp","expm1","fabs","fdim","floor","hypot","fma","fmax","fmin","fmod","pow","sqrt","sin","sinh","tan","tanh"};
+const char operatii[] = "+-/*^";
 
 string readFunction();
-bool writeFunction(string func);
-bool evaluateFunction(string func);
-bool checkSyntax(string func);
-bool checkForOperator(string function, int pozition);
+void parseByOperators(string f);
+bool checkForOperator(string function, int position, bool paraCheck=false);
+bool isInsideParantesis(string func, int poz);
+//string checkMissingMultiplication(string f,char variable);
+//bool isMathematicalFunction(string function, int &poz);
+//bool writeFunction(string func);
+//bool evaluateFunction(string func);
+//bool checkSyntax(string func);

@@ -17,6 +17,10 @@ int example3()
 int main() {
 //    example3();
     string func = readFunction();
-    checkSyntax(func);
-    return 0;
+//    checkSyntax(func);
+//    checkMissingMultiplication(func, 'x');
+    parseByOperators(func);
+
+return 0;
+
 }
