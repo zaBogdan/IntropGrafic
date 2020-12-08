@@ -17,10 +17,12 @@ int example3()
 int main() {
 //    example3();
     string func = readFunction();
-//    checkSyntax(func);
-//    checkMissingMultiplication(func, 'x');
-    parseByOperators(func);
+    cout << "The given function is: " << func << endl;
+    vector<string> tokens = tokenizeString(func);
+    for(auto i :tokens)
+        cout << i << ", ";
+    cout << endl;
 
-return 0;
+    return 0;
 
 }

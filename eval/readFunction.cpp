@@ -2,119 +2,167 @@
 // Created by Bogdan Zavadovschi on 06.12.2020.
 //
 
+//https://stackoverflow.com/questions/11708195/infix-to-postfix-with-function-support
 #include "readFunction.h"
-//bool isValid=true;
 
 //reading from file for now.
 string readFunction()
 {
     string function;
     //debug
+
+
     ifstream f("../demoFunction.txt");
-    f >> function;
-    cout << function << '\n';
+    getline(f, function);
     f.close();
+
+
     //end debug
+    function = sanitizeString(function);
     return function;
 }
 
 
-void parseByOperators(string f)
+
+vector<string> tokenizeString(string f)
 {
-    cout << "Initial function: " << f << endl;
+    vector<string> tokens;
     int poz=0, lastPos=0;
-    while(poz < f.length())
+    while(poz<f.length())
     {
-        if(checkForOperator(f, poz))
+        int value;
+        //check for operator
+        if(isOperator(f,poz))
         {
-            cout << "Found subfunction: " << f.substr(lastPos, poz-lastPos) << endl;
-            lastPos=poz+1;
+            if(DEBUG==true)
+                cout << "Found the operator "<< f[poz] << " at position: " << poz << endl;
+            tokens.push_back(f.substr(poz, 1));
+
+        }
+        //check for operand
+        else if(isOperand(f, poz, value))
+        {
+            if(DEBUG==true)
+                cout << "We found the operand " << f.substr(poz, value-poz) << " at position: " << poz << " for " << value << " length!\n";
+            tokens.push_back(f.substr(poz,value-poz));
+            poz+=(value-poz)-1;
         }
         poz++;
     }
-    cout << "Found subfunction: " << f.substr(lastPos, poz-lastPos) << endl;
+    if(DEBUG==true)
+    {
+        cout << "This are the tokens before applying the rules: \n";
+        for(auto i: tokens)
+            cout << i << ", ";
+        cout << endl;
+    }
+    return applyTokenizationRules(tokens);
 }
 
 
-
-//this function must be done properly.
-bool checkForOperator(string function, int position, bool paraCheck)
+vector<string> applyTokenizationRules(vector<string> tokens)
 {
+    /**
+     * Find a way to use offsets and visit matrix.
+     * BUG: You must add the end of the function.
+     */
+    vector<string> normalizedTokens;
+    int dummyVariable=0;
+    for(int i=0;i<tokens.size();i++)
+    {
+        if(tokens[i][0]=='-' && isOperand(tokens[i+1].c_str(),0,dummyVariable))
+        {
+            if(DEBUG==true)
+                cout << "FOUND UNARY - OPERATOR at pos" << i << endl;
+            normalizedTokens.push_back(tokens[i]+ tokens[i+1]);
+            //must be redone!!
+            tokens.erase(tokens.begin()+i+1);
+        }
+        else if(isMathematicalFunction(tokens[i]))
+        {
+            cout << "Got math function: "<< tokens[i] << " poz in vector " << i;
+            normalizedTokens.push_back(tokens[i]);
+            normalizedTokens.push_back("[");
+            int closingOfMathFunction = getEndOfMathFunction(tokens, i+1);
+            cout << " FOUND THE END AT: " << tokens[closingOfMathFunction] << " Poz: "<< closingOfMathFunction << endl;
+//            normalizedTokens.insert(normalizedTokens.begin()+closingOfMathFunction, "]");
+            //must be redone!!!
+            tokens.erase(tokens.begin()+i+1);
 
+        }
+        else
+        {
+            normalizedTokens.push_back(tokens[i]);
+        }
+    }
+    for(auto i:tokens)
+        cout <<i << ", ";
+    cout << endl;
+    return normalizedTokens;
+}
+
+//check for the operators.
+bool isOperator(string function, int position)
+{
+    //check if we should even bother to look for special cases
     if(!strchr(operatii, function[position]))
         return false;
-    if(function[position] == '-' && !paraCheck)
-    {
-        char nc= function[position + 1];
-        if(position + 1 > function.length())
-            return false;
-        if(isdigit(nc) || isalpha(nc) || nc == '(')
-            return false;
-    }
-    if(function[position] == '-' && paraCheck)
-    {
-        char bc = function[position - 1];
-        if(strchr(operatii, bc) || isdigit(bc) || isdigit(bc) || strchr("()", bc))
-            return true;
-        return false;
-    }
-//    cout << "WAITING LAST CHECK AT: " << position << endl;
-    for(int i=position; i >= 0; i--)
-    {
-        //must be checking if I am inside parantesis
-        if(function[i]=='(' && checkForOperator(function,i-1, true))
-            return false;
-    }
-//    cout << "VALID AT POSITION: " << position << endl;
+    //we have a valid 2 way merge
     return true;
 }
 
-
-//bool isInsideParantesis(string func, int poz)
-//{
-//    int open=0,close=0;
-//    while(poz!=0)
-//    {
-//        if(func[poz]=='(')
-//            open++;
-//        if(func[poz]==')')
-//            close++;
-//    }
-//    return (open<close);
-//}
-//check if it is a mathematical function
-bool isMathematicalFunction(string function, int &poz)
+//check for the variables or for numbers
+bool isOperand(string function, int position, int &value)
 {
-    if(!isalpha(function[poz-1]))
-        return false;
-    int leng = 0, intialPoz=poz;
-    poz--;
-    while(isalpha(function[poz]))
-        poz--, leng++;
-    string mathCheck = function.substr(poz+1, leng);
-    //make them to a standard.
-    transform(mathCheck.begin(), mathCheck.end(), mathCheck.begin(), ::tolower);
-    //map alternatives ( ex: rad(x) = sqrt(x) )
+    value=position;
+    if(function[value] == '-') {
+        char low = function[position - 1], high = function[position + 1];
+        //check if at the lower place is an operator and at the higher positon we can find a digi, number or an open paranthesis
+        if ((low >= 0 && strchr(operatii, low)) && (high < function.length() && (isalpha(high) || isdigit(high) || high == '(')))
+            value++;
+    }
+    while(!strchr(operatii,function[value]) && value<function.length())
+        value++;
+    for(int i=position;i<value && i<function.length();i++)
+        if(!isalpha(function[i]) && !isdigit(function[i]) && function[i]!='-' && function[i]!=',')
+            return false;
+    return true;
+}
 
-    for(int i=0;i<mathFunctionsCounter;i++)
-        if(mathCheck.find(mathematicalFunctions[i])!=string::npos)
-        {
-            //move the pointer
-            poz = intialPoz;
-            int openPar = 0;
-            while(poz<function.length())
-            {
-                if(function[poz]=='(')
-                    openPar++;
-                if(function[poz]==')')
-                    openPar--;
-                if(!openPar)
-                    break;
-                poz++;
-            }
-            poz--;
+//check if it's mathematical function
+bool isMathematicalFunction(string f)
+{
+    int i=0;
+    for(i=0;i<mathFunctionsCounter;i++)
+        if(!strcmp(mathematicalFunctions[i],f.c_str()))
             return true;
-        }
-    poz=intialPoz;
     return false;
+}
+
+//sanitize the string for spaces
+string sanitizeString(string f)
+{
+    for(int i=0;i<f.length();i++)
+        if(f[i]==' ')
+        {
+            f.erase(i,1);
+            i--;
+        }
+    return f;
+}
+
+//If we are inside of a function check where it ends
+int getEndOfMathFunction(vector<string> tokens, int poz)
+{
+    int openPars=0;
+    for(int i=poz;i<tokens.size();i++)
+    {
+        if(tokens[i][0]=='(')
+            openPars++;
+        if(tokens[i][0]==')')
+            openPars--;
+        if (!openPars)
+            return i;
+    }
+    return -1;
 }
