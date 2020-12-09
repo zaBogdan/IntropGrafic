@@ -3,7 +3,7 @@
 //
 
 //https://stackoverflow.com/questions/11708195/infix-to-postfix-with-function-support
-#include "readFunction.h"
+#include "parse.h"
 
 //reading from file for now.
 string readFunction()
@@ -62,42 +62,42 @@ vector<string> tokenizeString(string f)
 
 vector<string> applyTokenizationRules(vector<string> tokens)
 {
-    /**
-     * Find a way to use offsets and visit matrix.
-     * BUG: You must add the end of the function.
-     */
+    bool vizitati[tokens.size()+10];
+    memset(vizitati, 0, tokens.size()+10);
     vector<string> normalizedTokens;
-    int dummyVariable=0;
+    int dummyVariable=0,offset=0;
     for(int i=0;i<tokens.size();i++)
     {
-        if(tokens[i][0]=='-' && isOperand(tokens[i+1].c_str(),0,dummyVariable))
+        if(tokens[i][0]=='-' && isOperand(tokens[i+1].c_str(),0,dummyVariable) && !vizitati[i])
         {
             if(DEBUG==true)
                 cout << "FOUND UNARY - OPERATOR at pos" << i << endl;
             normalizedTokens.push_back(tokens[i]+ tokens[i+1]);
-            //must be redone!!
-            tokens.erase(tokens.begin()+i+1);
+            vizitati[i]=1;
+            vizitati[i+1]=1;
+            offset++;
         }
-        else if(isMathematicalFunction(tokens[i]))
+        else if(isMathematicalFunction(tokens[i]) && !vizitati[i])
         {
-            cout << "Got math function: "<< tokens[i] << " poz in vector " << i;
             normalizedTokens.push_back(tokens[i]);
+            vizitati[i]=1;
             normalizedTokens.push_back("[");
+            vizitati[i+1]=1;
             int closingOfMathFunction = getEndOfMathFunction(tokens, i+1);
-            cout << " FOUND THE END AT: " << tokens[closingOfMathFunction] << " Poz: "<< closingOfMathFunction << endl;
-//            normalizedTokens.insert(normalizedTokens.begin()+closingOfMathFunction, "]");
-            //must be redone!!!
-            tokens.erase(tokens.begin()+i+1);
-
+            if(DEBUG==true)
+            {
+                cout << "Got math function: "<< tokens[i] << " found at the pozition in vector " << i;
+                cout << " and it ends with: " << tokens[closingOfMathFunction] << " the position in vector being "<< closingOfMathFunction << endl;
+            }
+            tokens[13]=string("]");
+            if(closingOfMathFunction<tokens.size() && tokens[closingOfMathFunction][0]==')')
+                tokens[closingOfMathFunction]=string("]");
         }
-        else
+        else if(!vizitati[i])
         {
             normalizedTokens.push_back(tokens[i]);
         }
     }
-    for(auto i:tokens)
-        cout <<i << ", ";
-    cout << endl;
     return normalizedTokens;
 }
 

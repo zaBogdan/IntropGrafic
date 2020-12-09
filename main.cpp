@@ -1,7 +1,7 @@
 #include <iostream>
 #define SDL_MAIN_HANDLED
 #include <graphics.h>
-#include "eval/readFunction.h"
+#include "eval/parse.h"
 
 int example3()
 {
@@ -19,8 +19,9 @@ int main() {
     string func = readFunction();
     cout << "The given function is: " << func << endl;
     vector<string> tokens = tokenizeString(func);
+    cout << "The modified function: ";
     for(auto i :tokens)
-        cout << i << ", ";
+        cout << i;
     cout << endl;
 
     return 0;
