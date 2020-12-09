@@ -1,9 +1,6 @@
-//
-// Created by Bogdan Zavadovschi on 06.12.2020.
-//
-
-//https://stackoverflow.com/questions/11708195/infix-to-postfix-with-function-support
 #include "parse.h"
+//https://stackoverflow.com/questions/11708195/infix-to-postfix-with-function-support
+
 
 //reading from file for now.
 string readFunction()
@@ -35,7 +32,7 @@ vector<string> tokenizeString(string f)
         if(isOperator(f,poz))
         {
             if(DEBUG==true)
-                cout << "Found the operator "<< f[poz] << " at position: " << poz << endl;
+                cout << "[Tokenize] Found the operator "<< f[poz] << " at position: " << poz << endl;
             tokens.push_back(f.substr(poz, 1));
 
         }
@@ -43,7 +40,7 @@ vector<string> tokenizeString(string f)
         else if(isOperand(f, poz, value))
         {
             if(DEBUG==true)
-                cout << "We found the operand " << f.substr(poz, value-poz) << " at position: " << poz << " for " << value << " length!\n";
+                cout << "[Tokenize] Found the operand " << f.substr(poz, value-poz) << " at position: " << poz << " for " << value << " length!\n";
             tokens.push_back(f.substr(poz,value-poz));
             poz+=(value-poz)-1;
         }
@@ -51,7 +48,7 @@ vector<string> tokenizeString(string f)
     }
     if(DEBUG==true)
     {
-        cout << "This are the tokens before applying the rules: \n";
+        cout << "[Tokenize] This are the tokens before applying the rules: \n";
         for(auto i: tokens)
             cout << i << ", ";
         cout << endl;
@@ -59,41 +56,45 @@ vector<string> tokenizeString(string f)
     return applyTokenizationRules(tokens);
 }
 
-
+// sin(x) -> x sin
+// x+y -> x y +
 vector<string> applyTokenizationRules(vector<string> tokens)
 {
-    bool vizitati[tokens.size()+10];
-    memset(vizitati, 0, tokens.size()+10);
+    bool visited[tokens.size() + 10];
+    memset(visited, 0, tokens.size() + 10);
     vector<string> normalizedTokens;
-    int dummyVariable=0,offset=0;
+    int dummyVariable=0,dumVar=0,offset=0;
     for(int i=0;i<tokens.size();i++)
     {
-        if(tokens[i][0]=='-' && isOperand(tokens[i+1].c_str(),0,dummyVariable) && !vizitati[i])
+        if(tokens[i][0]=='-' && isOperand(tokens[i+1].c_str(),0,dummyVariable) && !visited[i])
         {
             if(DEBUG==true)
-                cout << "FOUND UNARY - OPERATOR at pos" << i << endl;
+                cout << "[Rules] Found unary minus at " << i << endl;
             normalizedTokens.push_back(tokens[i]+ tokens[i+1]);
-            vizitati[i]=1;
-            vizitati[i+1]=1;
+            visited[i]=1;
+            visited[i + 1]=1;
             offset++;
         }
-        else if(isMathematicalFunction(tokens[i]) && !vizitati[i])
+        else if(isMathematicalFunction(tokens[i]))
         {
-            normalizedTokens.push_back(tokens[i]);
-            vizitati[i]=1;
+            if(!visited[i])
+            {
+                normalizedTokens.push_back(tokens[i]);
+                visited[i]=1;
+            }
             normalizedTokens.push_back("[");
-            vizitati[i+1]=1;
+            visited[i + 1]=1;
             int closingOfMathFunction = getEndOfMathFunction(tokens, i+1);
             if(DEBUG==true)
             {
-                cout << "Got math function: "<< tokens[i] << " found at the pozition in vector " << i;
-                cout << " and it ends with: " << tokens[closingOfMathFunction] << " the position in vector being "<< closingOfMathFunction << endl;
+                cout << "[Rules] Found math function `"<< tokens[i] << "` with the start position in vector " << i;
+                cout << " ending at "<< closingOfMathFunction << endl;
             }
-            tokens[13]=string("]");
             if(closingOfMathFunction<tokens.size() && tokens[closingOfMathFunction][0]==')')
                 tokens[closingOfMathFunction]=string("]");
+
         }
-        else if(!vizitati[i])
+        else if(!visited[i])
         {
             normalizedTokens.push_back(tokens[i]);
         }
@@ -132,6 +133,7 @@ bool isOperand(string function, int position, int &value)
 //check if it's mathematical function
 bool isMathematicalFunction(string f)
 {
+    cout << "CHECK FOR " << f << endl;
     int i=0;
     for(i=0;i<mathFunctionsCounter;i++)
         if(!strcmp(mathematicalFunctions[i],f.c_str()))
@@ -150,7 +152,6 @@ string sanitizeString(string f)
         }
     return f;
 }
-
 //If we are inside of a function check where it ends
 int getEndOfMathFunction(vector<string> tokens, int poz)
 {

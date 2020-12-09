@@ -17,13 +17,16 @@ int example3()
 int main() {
 //    example3();
     string func = readFunction();
-    cout << "The given function is: " << func << endl;
+    cout << "[Final Output] The given function is: " << func << endl;
     vector<string> tokens = tokenizeString(func);
-    cout << "The modified function: ";
+    cout << "[Final Output] The tokenized func is: ";
     for(auto i :tokens)
         cout << i;
     cout << endl;
-
+    cout << "[Final Output] Checking the vector: \n";
+    for(auto i :tokens)
+        cout << i << " | ";
+    cout << endl;
     return 0;
 
 }

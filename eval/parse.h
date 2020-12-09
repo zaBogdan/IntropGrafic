@@ -1,14 +1,9 @@
-//
-// Created by Bogdan Zavadovschi on 06.12.2020.
-//
-
 #pragma once
 #include <iostream>
 #include <fstream>
 #include <cstring>
 #include <vector>
-#include <algorithm>
-#define DEBUG false
+#define DEBUG true
 using namespace std;
 
 const int mathFunctionsCounter = 23;

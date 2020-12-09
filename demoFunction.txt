@@ -1,1 +1,1 @@
--x^-2+x^3+cos(x)/(sin(x)+x*sqrt(x+sin(y+x)))^(1,2x+12)+10^x
+-sin(x+y+z)+x+-x
