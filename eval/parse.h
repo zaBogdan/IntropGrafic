@@ -3,12 +3,12 @@
 #include <fstream>
 #include <cstring>
 #include <vector>
-#define DEBUG true
+#define DEBUG false
 using namespace std;
 
 const int mathFunctionsCounter = 23;
 const char mathematicalFunctions[25][10] = {"abs","acos","asin","atan","cbrt","ceil","cos","cosh","exp","expm1","fabs","fdim","floor","hypot","fma","fmax","fmin","fmod","pow","sqrt","sin","sinh","tan","tanh"};
-const char operatii[] = "+-/*^()";
+const char operatii[10] = "+-/*^()";
 
 /**
  * Main functions

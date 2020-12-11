@@ -1,12 +1,14 @@
 #pragma once
 #include <iostream>
-#include "validate.h"
+#include <stack>
+#include "parse.h"
 using namespace std;
+const int maxPriority = 2;
+const char operat[10] = "+-/*^";
+const char priority[maxPriority][10] = {"+-", "*/^"};
 
-struct node{
-    string data;
-    node *left, *right;
-};
-//typedef arb *node;
 
-//bool checkValidity(arb func);
+vector<string> getPostfix(vector<string> tokens);
+bool isOperand(string token);
+bool isOperator(char oper);
+int getPriority(char oper);

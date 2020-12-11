@@ -133,9 +133,7 @@ bool isOperand(string function, int position, int &value)
 //check if it's mathematical function
 bool isMathematicalFunction(string f)
 {
-    cout << "CHECK FOR " << f << endl;
-    int i=0;
-    for(i=0;i<mathFunctionsCounter;i++)
+    for(int i=0;i<mathFunctionsCounter;i++)
         if(!strcmp(mathematicalFunctions[i],f.c_str()))
             return true;
     return false;
@@ -145,11 +143,17 @@ bool isMathematicalFunction(string f)
 string sanitizeString(string f)
 {
     for(int i=0;i<f.length();i++)
-        if(f[i]==' ')
+    {
+        if(isalpha(f[i]))
+            f[i]=tolower(f[i]);
+        else if(f[i]==' ')
         {
             f.erase(i,1);
             i--;
         }
+        else if(f[i]==',')
+            f[i]='.';
+    }
     return f;
 }
 //If we are inside of a function check where it ends

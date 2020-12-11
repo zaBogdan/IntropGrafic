@@ -2,6 +2,7 @@
 #define SDL_MAIN_HANDLED
 #include <graphics.h>
 #include "eval/parse.h"
+#include "eval/validate.h"
 
 int example3()
 {
@@ -23,10 +24,12 @@ int main() {
     for(auto i :tokens)
         cout << i;
     cout << endl;
-    cout << "[Final Output] Checking the vector: \n";
-    for(auto i :tokens)
-        cout << i << " | ";
+    vector<string> postfix = getPostfix(tokens);
+    cout << "[Final Output] The postfix form is: ";
+    for(auto i: postfix)
+        cout << i << ", ";
     cout << endl;
+
     return 0;
 
 }
