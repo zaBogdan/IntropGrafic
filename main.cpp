@@ -3,6 +3,7 @@
 #include <graphics.h>
 #include "eval/parse.h"
 #include "eval/validate.h"
+#include "draw/draw.h"
 
 int example3()
 {
