@@ -1,5 +1,35 @@
 #include "validate.h"
 
+
+bool checkValidity(vector<string> postfix)
+{
+    int counter=0;
+    for(auto i: postfix)
+    {
+        if((isOperator(i[0]) && i.length()==1 ) || isMathematicalFunction(i))
+        {
+            int arity = getArity(i);
+            if(DEBUG==true) cout << "[VALIDATION] Found the operator " << i << " with arity " << arity << endl;
+            if(arity==-1)
+                return false;
+            counter-=arity;
+            counter++;
+        }else if(isOperand(i))
+        {
+            if(DEBUG==true) cout << "[VALIDATION] Found the operand " << i << endl;
+            counter++;
+        }
+        else
+            return false;
+
+        if(counter<0)
+            return false;
+    }
+    if(counter==1)
+        return true;
+    return false;
+}
+
 vector<string> getPostfix(vector<string> tokens)
 {
     vector<string> postfix;
@@ -14,33 +44,45 @@ vector<string> getPostfix(vector<string> tokens)
         else if(isOperand(token))
         {
             if(DEBUG==true) cout << "[POSTFIX] Adding the operand " << token << " to the VECTOR \n";
-            postfix.push_back(token);
+            int poz = digitVal(token);
+            if(poz==-1)
+                postfix.push_back(token);
+            else
+            {
+                postfix.push_back(token.substr(0, poz));
+                postfix.push_back(token.substr(poz, token.length()-poz));
+                postfix.push_back("*");
+            }
         }
         else {
             //check for normal pharanthesis
             if(token[0]==')')
             {
                 if(DEBUG==true) cout << "[POSTFIX] Found closing parathesis \n";
-                while(s.top()[0]!='(' && !s.empty())
+                while(!s.empty() && s.top()[0]!='(')
                 {
                     postfix.push_back(s.top());
                     s.pop();
                 }
-                s.pop();
+                if(!s.empty())
+                    s.pop();
             }
             //check for math functions
             else if(token[0]==']')
             {
                 if(DEBUG==true) cout << "[POSTFIX] Found closing math function \n";
-                while(s.top()[0]!='[' && !s.empty())
+                while(!s.empty() && s.top()[0]!='[')
                 {
                     postfix.push_back(s.top());
                     s.pop();
                 }
-                s.pop();
-                //get the math function associated.
-                postfix.push_back(s.top());
-                s.pop();
+                if(s.size()>=2)
+                {
+                    s.pop();
+                    //get the math function associated.
+                    postfix.push_back(s.top());
+                    s.pop();
+                }
             }
             //now we are 100% dealing with operands
             else if(isOperator(token[0])){
@@ -105,4 +147,28 @@ int getPriority(char oper)
         if(strchr(priority[i], oper))
             return i;
     return -1;
+}
+int digitVal(string token)
+{
+    int poz = 0;
+    if(token[poz]=='-')
+        poz++;
+    if(!isdigit(token[poz]))
+        return -1;
+    while(isdigit(token[poz]) && poz<token.length())
+        poz++;
+    if(poz==token.length())
+        return -1;
+    return poz;
+}
+int getArity(string i)
+{
+    if(strchr(operat,i[0]))
+        return 2;
+    for(auto stri: arity2Op)
+        if(!i.compare(stri))
+            return 2;
+    if(strchr("[()]",i[0]))
+        return -1;
+    return 1;
 }

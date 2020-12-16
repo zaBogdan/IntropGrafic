@@ -1,1 +1,1 @@
-cos(x^(sin(x)+exp(2x)*10-1)+sqrt(abs(x+tan(x+sin(x)))))
+cos(x+sin(x^2+sqrt(x/10+e+10x)))

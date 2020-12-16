@@ -1,6 +1,4 @@
 #include "parse.h"
-//https://stackoverflow.com/questions/11708195/infix-to-postfix-with-function-support
-
 
 //reading from file for now.
 string readFunction()

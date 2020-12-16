@@ -19,18 +19,20 @@ int example3()
 int main() {
 //    example3();
     string func = readFunction();
-    cout << "[Final Output] The given function is: " << func << endl;
+    cout << "[RESULT] The given function is: " << func << endl;
     vector<string> tokens = tokenizeString(func);
-    cout << "[Final Output] The tokenized func is: ";
+    cout << "[RESULT] The tokenized func is: ";
     for(auto i :tokens)
         cout << i;
     cout << endl;
     vector<string> postfix = getPostfix(tokens);
-    cout << "[Final Output] The postfix form is: ";
+    cout << "[RESULT] The postfix form is: ";
     for(auto i: postfix)
         cout << i << ", ";
     cout << endl;
-
+    cout << "[RESULT] The formula `" << func;
+    cout << ((checkValidity(postfix) == true) ? "` is valid!" : " is INVALID!");
+    cout << endl;
     return 0;
 
 }
