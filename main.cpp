@@ -3,6 +3,7 @@
 #include <graphics.h>
 #include "eval/parse.h"
 #include "eval/validate.h"
+#include "eval/generateFunction.h"
 #include "draw/draw.h"
 
 int example3()
@@ -32,6 +33,10 @@ int main() {
     cout << endl;
     cout << "[RESULT] The formula `" << func;
     cout << ((checkValidity(postfix) == true) ? "` is valid!" : " is INVALID!");
+    cout << endl;
+
+    cout << "[MergeFunction] THe output is: \n";
+    cout << postfixToCPP(postfix);
     cout << endl;
     return 0;
 
