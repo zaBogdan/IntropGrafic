@@ -81,51 +81,48 @@ double tr(int coord, double zoom, int translare)
 }
 
 ///Functie temporara pentru teste
-double func(double n)
+double func(double n, vector<string> postfix)
 {
-    return n*n+n;
+    return getValueFromPostfix(postfix,n);
 }
 
 ///Deseneaza functie pe intervalul [a, b] intr-o fereastra de dimensiuni lgx, lgy
-void drawf (int a, int b, double unitax, int lgx, int lgy, double zoom, int tx, int ty)
-{
+void drawf (int a, int b, double unitax, int lgx, int lgy, double zoom, int tx, int ty,vector<string> postfix) {
 
     cleardevice();
-    drawaxes (a, b, lgx, lgy, zoom, tx, ty);
+    drawaxes(a, b, lgx, lgy, zoom, tx, ty);
 
 
     ///desenarea graficului
-    double x1=lgx/2 + (a/unitax) * unitaxpx;
-    double y1=lgy/2 - (func(a)/unitax) * unitaxpx;
-    double x2=lgx/2 + ((a+unitf)/unitax) * unitaxpx;
-    double y2=lgy/2 - (func(a + unitf)/unitax) * unitaxpx;
+    double x1 = lgx / 2 + (a / unitax) * unitaxpx;
+    double y1 = lgy / 2 - (func(a,postfix) / unitax) * unitaxpx;
+    double x2 = lgx / 2 + ((a + unitf) / unitax) * unitaxpx;
+    double y2 = lgy / 2 - (func(a + unitf,postfix) / unitax) * unitaxpx;
 
-    for(double j=a+2*unitf; j<=b; j+=unitf)
-    {
-        double x3=(j/unitax) * unitaxpx + lgx/2;
-        double y3=lgy/2-(func(j)/unitax) * unitaxpx;
+    for (double j = a + 2 * unitf; j <= b; j += unitf) {
+        double x3 = (j / unitax) * unitaxpx + lgx / 2;
+        double y3 = lgy / 2 - (func(j,postfix) / unitax) * unitaxpx;
 
-        if(!((y1 > lgy && y2 < 0) || (y2 > lgy && y1 < 0)))
-        {
+        if (!((y1 > lgy && y2 < 0) || (y2 > lgy && y1 < 0))) {
             line(tr(x1, zoom, tx), tr(y1, zoom, ty),
                  tr(x2, zoom, tx), tr(y2, zoom, ty));
 
-            if(y2<y1 && y2<y3)
-                circle(tr(x2, zoom, tx), tr(y2, zoom, ty), 5*zoom);
-            if(y2>y1 && y2>y3)
-                circle(tr(x2, zoom, tx), tr(y2, zoom, ty), 5*zoom);
+            if (y2 < y1 && y2 < y3)
+                circle(tr(x2, zoom, tx), tr(y2, zoom, ty), 5 * zoom);
+            if (y2 > y1 && y2 > y3)
+                circle(tr(x2, zoom, tx), tr(y2, zoom, ty), 5 * zoom);
         }
 
-        x1=x2;
-        y1=y2;
-        x2=x3;
-        y2=y3;
+        x1 = x2;
+        y1 = y2;
+        x2 = x3;
+        y2 = y3;
 
     }
-
- /**
-  * main example
-  * int a, b;
+}
+void drawGraph(vector<string> postfix)
+{
+    int a, b;
     char ch;
     double unitax, zoom;
     int tx, ty;
@@ -141,7 +138,7 @@ void drawf (int a, int b, double unitax, int lgx, int lgy, double zoom, int tx, 
     initwindow(800, 1000);
     do
     {
-        drawf(a, b, unitax, 800, 1000, zoom, tx, ty);
+        drawf(a, b, unitax, 800, 1000, zoom, tx, ty,postfix);
         ch=getch();
         switch(ch)
         {
@@ -161,5 +158,4 @@ void drawf (int a, int b, double unitax, int lgx, int lgy, double zoom, int tx, 
 
 
     closegraph();
-  */
 }

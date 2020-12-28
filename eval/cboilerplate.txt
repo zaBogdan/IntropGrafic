@@ -1,6 +1,0 @@
-#pragma once
-#include <iostream>
-
-double function(int x){
-    return <functie>
-}

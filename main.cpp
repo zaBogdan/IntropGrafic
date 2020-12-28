@@ -1,42 +1,53 @@
-#include <iostream>
-#define SDL_MAIN_HANDLED
-#include <graphics.h>
-#include "eval/parse.h"
-#include "eval/validate.h"
-#include "eval/generateFunction.h"
-#include "draw/draw.h"
+#include "setup.h"
 
-int example3()
+/**
+  * Reads the function from file for now.
+  * TODO: Implement it in the UI
+  * @return string
+  */
+string readFunction2()
 {
-    initwindow(800,600); int x = 400, y = 300, r;
-    for (r = 25; r <= 125; r += 20)
-        circle(x, y, r);
-    getch(); closegraph(); return 0;
-}
+    string function;
+    //debug
 
+
+    ifstream f("../demoFunction.txt");
+    getline(f, function);
+    f.close();
+
+
+    //end debug
+//    function = sanitizeString(function);
+    return function;
+}
 //arguments for main?idk
 //int argc, char* args[]
+double f(double x)
+{
+    return log(cos(x+sin(pow(x,2)+sqrt(x/10+pow(x,20)+10*x)))+pow(10.02,2))+10*x+10/x;
+}
 
 int main() {
-//    example3();
-    string func = readFunction();
-    cout << "[RESULT] The given function is: " << func << endl;
-    vector<string> tokens = tokenizeString(func);
-    cout << "[RESULT] The tokenized func is: ";
-    for(auto i :tokens)
-        cout << i;
-    cout << endl;
-    vector<string> postfix = getPostfix(tokens);
-    cout << "[RESULT] The postfix form is: ";
-    for(auto i: postfix)
-        cout << i << ", ";
-    cout << endl;
-    cout << "[RESULT] The formula `" << func;
-    cout << ((checkValidity(postfix) == true) ? "` is valid!" : " is INVALID!");
-    cout << endl;
+    string func = readFunction2();
+    vector<string> postfix = buildAndValidatePostfix(func);
+    if(postfix.empty())
+        return 1;
+    cout << "[MAIN] The C/C++ notation of this function is: ";
+    cout << getCPPNotation(postfix) << endl;
 
-    cout << "[MergeFunction] THe output is: \n";
-    cout << postfixToCPP(postfix);
+    for(double x=-10;x<=10;x+=0.2)
+    {
+        double val = getValueFromPostfix(postfix, x);
+        cout << "[Value] The value for x="<< x << " is: ";
+        cout << val << '\n';
+//        if(f(x)!=val)
+//        {
+//            cout << "[BREAK] ALGO OUTPUTED " << val << " BUT IT IS " << f(x) << endl;
+//            return 2;
+//        }
+    }
+    drawGraph(postfix);
+
     cout << endl;
     return 0;
 
