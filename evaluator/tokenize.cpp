@@ -51,7 +51,7 @@ vector<string> applyTokenRules(vector<string> tokens)
         string workingValue = tokens[i];
         if (workingValue[0] == '-' && workingValue.length() == 1
             && (isOperand(tokens[i + 1].c_str(), 0, dummyLen) || isMathFunction(tokens[i+1],1,dummyLen))
-            && (i-1>=0 && !(isOperand(tokens[i-1],0,dummyLen) || isMathFunction(tokens[i-1],1,dummyLen)) || i-1<0)
+            && ((i-1>=0 && !(isOperand(tokens[i-1],0,dummyLen) || isMathFunction(tokens[i-1],1,dummyLen))) || i-1<0)
             && !visited[i])
         {
             if (DEBUG == true)

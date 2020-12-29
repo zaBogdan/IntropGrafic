@@ -89,7 +89,7 @@ double func(double n, vector<string> postfix)
 ///Deseneaza functie pe intervalul [a, b] intr-o fereastra de dimensiuni lgx, lgy
 void drawf (int a, int b, double unitax, int lgx, int lgy, double zoom, int tx, int ty,vector<string> postfix) {
 
-    cleardevice();
+//    cleardevice();
     drawaxes(a, b, lgx, lgy, zoom, tx, ty);
 
 
@@ -122,6 +122,11 @@ void drawf (int a, int b, double unitax, int lgx, int lgy, double zoom, int tx, 
 }
 void drawGraph(vector<string> postfix)
 {
+    /**
+     * TODO: Inputul trebuie mutat pe partea grafica
+     * TODO: Trebuie realizata desenarea functiei dupa modelul cu initgraph
+     * BUG: Butonu de back e inutil momentan.
+     */
     int a, b;
     char ch;
     double unitax, zoom;
@@ -130,32 +135,35 @@ void drawGraph(vector<string> postfix)
     ty=0;
     unitax=1;  ///distanta dintre 2 pct pe axa in unitati
     zoom=1;
-    cout<<"Marginea inferioara a intervalului:";
-    cin>>a;
-    cout<<"Marginea superioara a intervalului:";
-    cin>>b;
+    a=-10;
+    b=10;
+//    cout<<"Marginea inferioara a intervalului:";
+//    cin>>a;
+//    cout<<"Marginea superioara a intervalului:";
+//    cin>>b;
+//    drawf(a, b, unitax, maxWidth, maxHeigh, zoom, tx, ty,postfix);
+    drawf(a, b, unitax, 800, 1000, zoom, tx, ty,postfix);
 
-    initwindow(800, 1000);
-    do
-    {
-        drawf(a, b, unitax, 800, 1000, zoom, tx, ty,postfix);
-        ch=getch();
-        switch(ch)
-        {
-            case '+': zoom=zoom+0.1; break;
-            case '-': zoom=zoom-0.1; break;
-            case 'w':
-            case 72 : ty=ty-5; break;
-            case 's':
-            case 80 : ty=ty+5; break;
-            case 'a':
-            case 75 : tx=tx-5; break;
-            case 'd':
-            case 77 : tx=tx+5; break;
-        }
-    } while(ch!='x');
+//    do
+//    {
+//        drawf(a, b, unitax, 800, 1000, zoom, tx, ty,postfix);
+//        ch=getch();
+//        switch(ch)
+//        {
+//            case '+': zoom=zoom+0.1; break;
+//            case '-': zoom=zoom-0.1; break;
+//            case 'w':
+//            case 72 : ty=ty-5; break;
+//            case 's':
+//            case 80 : ty=ty+5; break;
+//            case 'a':
+//            case 75 : tx=tx-5; break;
+//            case 'd':
+//            case 77 : tx=tx+5; break;
+//        }
+//    } while(ch!='x');
 
 
 
-    closegraph();
+//    closegraph();
 }

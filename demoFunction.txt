@@ -1,1 +1,1 @@
-cos(x+sin(x^2+sqrt(x/10+e^20+10x)))
+x^2

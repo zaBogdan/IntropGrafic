@@ -1,5 +1,6 @@
 #pragma once
 #include "../setup.h"
+#include "menu.h"
 using namespace std;
-const int defaultSizeX = 60, defaultSizeY = 30;
-void drawButton(int, int, char text[20],int size=1);
+const int defaultSizeX = 10, defaultSizeY = 10;
+void drawButton(int, int, char text[20],int);

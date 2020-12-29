@@ -34,7 +34,6 @@ int main() {
         return 1;
     cout << "[MAIN] The C/C++ notation of this function is: ";
     cout << getCPPNotation(postfix) << endl;
-
 //    for(double x=-10;x<=10;x+=0.2)
 //    {
 //        double val = getValueFromPostfix(postfix, x);
@@ -46,10 +45,8 @@ int main() {
 //            return 2;
 //        }
 //    }
-    mainLoop();
-//    drawGraph(postfix);
-
+    mainLoop(postfix);
+    cout << "[MAIN] This was the end!";
     cout << endl;
     return 0;
-
 }

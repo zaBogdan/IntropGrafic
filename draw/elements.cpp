@@ -4,23 +4,48 @@
 
 #include "elements.h"
 
-bool inFocus(int startX, int startY, int finishX, int finishY)
+bool inFocus(int x,int y,int textW, int textH)
 {
-
+    coord center;
+    center.x = x;
+    center.y = y;
+    int x1 = x-textW/2-2*defaultSizeX; //left
+    int x2 = x+textW/2+defaultSizeX+10; //right
+    int y1 = y-textH/2-defaultSizeY; //top
+    int y2 = y+textH+2*defaultSizeY+10; //bottom
+    if(mouseC.x>=x1 && mouseC.x<=x2)
+        if(mouseC.y>=y1 && mouseC.y<=y2)
+            return true;
+    return false;
 }
 
-void drawButton(int x, int y,char text[20],int size)
+void drawButton(int x, int y,char text[20],int aPage)
 {
-    if(size<=0 || size>=4)
-    {
-        cout << "[GRAPHICS] Failed to draw button! Maximum size is 3!";
-        return;
-    }
+    setcolor(WHITE);
     int font = 0;
     int direction = 0;
-    int font_size = size+1;
-    line(x-defaultSizeX, y+20, x+defaultSizeX, y+20);
-//    rectangle(x-defaultSizeX*size,y-defaultSizeY*size,x+defaultSizeX*size, y+defaultSizeY*size);
+    int font_size = 2;
     settextstyle(font,direction, 2*font_size);
-    outtextxy(x-38, y-8, text);
+    bool focus = inFocus(x,y,textwidth(text),textheight(text));
+    if(focus)
+    {
+        setcolor(COLOR(104, 137, 255));
+        line(x-textwidth(text)/2-10, y+defaultSizeY+textheight(text), x+textwidth(text)/2+10, y+defaultSizeY+textheight(text));
+        if(ismouseclick(WM_LBUTTONDOWN) || ismouseclick((WM_RBUTTONDOWN)))
+        {
+            cout << "[BUTTON] Active page set to: " << aPage << endl;
+            activePage = aPage;
+        }
+
+    }
+    outtextxy(x-textwidth(text)/2, y, text);
+
+    if(!focus)
+    {
+        setcolor(BLACK);
+        line(x-textwidth(text)/2-10, y+defaultSizeY+textheight(text), x+textwidth(text)/2+10, y+defaultSizeY+textheight(text));
+    }
+    //reset to normal
+    setcolor(WHITE);
+    settextstyle(0,0, 0);
 }

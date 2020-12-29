@@ -3,8 +3,17 @@
 #include "elements.h"
 #include "draw.h"
 using namespace std;
-const int maxWidth = 1080;
-const int maxHeigh = 720;
+//this must not be changed!!!
+const int maxWidth = 1024;
+const int maxHeigh = 768;
 const int frames = 30;
+struct coord{
+    int x=0,y=0;
+};
+extern coord mouseC;
+extern int activePage;
 
-void mainLoop();
+
+void mainLoop(vector<string>);
+void primaryPage();
+void quit();
