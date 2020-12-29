@@ -8,5 +8,5 @@
 #define DEBUG true
 #include <graphics.h>
 #include "evaluator/evaluator.h"
-#include "draw/draw.h"
+#include "draw/menu.h"
 using namespace std;

@@ -35,18 +35,19 @@ int main() {
     cout << "[MAIN] The C/C++ notation of this function is: ";
     cout << getCPPNotation(postfix) << endl;
 
-    for(double x=-10;x<=10;x+=0.2)
-    {
-        double val = getValueFromPostfix(postfix, x);
-        cout << "[Value] The value for x="<< x << " is: ";
-        cout << val << '\n';
+//    for(double x=-10;x<=10;x+=0.2)
+//    {
+//        double val = getValueFromPostfix(postfix, x);
+//        cout << "[Value] The value for x="<< x << " is: ";
+//        cout << val << '\n';
 //        if(f(x)!=val)
 //        {
 //            cout << "[BREAK] ALGO OUTPUTED " << val << " BUT IT IS " << f(x) << endl;
 //            return 2;
 //        }
-    }
-    drawGraph(postfix);
+//    }
+    mainLoop();
+//    drawGraph(postfix);
 
     cout << endl;
     return 0;

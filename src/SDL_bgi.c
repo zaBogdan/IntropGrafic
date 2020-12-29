@@ -4811,7 +4811,7 @@ void initwindow (int width, int height)
   }
 
   bgi_win[bgi_current_window] =
-    SDL_CreateWindow (bgi_win_title,
+    SDL_CreateWindow ("Grafic",
                       bgi_window_x,
                       bgi_window_y,
                       bgi_maxx + 1,
