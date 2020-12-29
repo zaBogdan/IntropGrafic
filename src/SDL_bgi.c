@@ -2506,9 +2506,9 @@ void initgraph (int *graphdriver, int *graphmode, char *pathtodriver)
   // modes may vary; the path parameter is ignored.
 
   if (NULL != graphmode)
-    bgi_gm = *graphmode;
+    bgi_gm = SDL_1024x768;
   else
-    bgi_gm = SDL_800x600; // default
+    bgi_gm = SDL_1024x768; // default
 
   // if graphdriver == NULL, no problem
 
