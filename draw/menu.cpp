@@ -16,9 +16,24 @@ void  drawPage()
 void secondaryPage()
 {
     setactivepage(2);
-    drawButton(300,300,"Small",0);
-}
+    drawButton(30, 20, "<",0);
+    char title[] = "This are your settings";
+    settextstyle(0,0,4);
+    outtextxy(maxWidth/2-textwidth(title)/2,100, title);
+    settextstyle(0,0,0);
 
+}
+void thirdPage()
+{
+    setactivepage(3);
+    drawButton(30, 20, "<",0);
+    char title[] = "Drawing a graph";
+    settextstyle(0,0,4);
+    outtextxy(maxWidth/2-textwidth(title)/2,100, title);
+    settextstyle(0,0,0);
+    char basic[] = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas a ex sodales, facilisis justo ut, blandit metus. Nunc non efficitur justo. Vestibulum at dictum libero. Maecenas placerat libero quis purus dapibus, id laoreet mauris sodales. Pellentesque et auctor sapien, vitae eleifend mi. Nullam massa enim, placerat a nunc in, eleifend facilisis nisl. Proin sit amet placerat leo. Vestibulum sit amet leo id dolor egestas congue.";
+    outtextxy(50,400, basic);
+}
 void mainLoop(vector<string> postfix)
 {
 
@@ -51,6 +66,11 @@ void mainLoop(vector<string> postfix)
         {
             activePage=2;
             secondaryPage();
+        }
+        if(activePage==3)
+        {
+            activePage=3;
+            thirdPage();
         }
         if(activePage==0)
         {
@@ -90,8 +110,8 @@ void primaryPage()
     char inf[] = "Information";
     char quit[] = "Quit";
     drawButton(maxWidth/2,300,draw,1);
-    drawButton(maxWidth/2,400,set,0);
-    drawButton(maxWidth/2,500,inf,2);
+    drawButton(maxWidth/2,400,set,2);
+    drawButton(maxWidth/2,500,inf,3);
     drawButton(maxWidth/2,600,quit,-1);
 
     char buildVersion[] = "Debug build 0.5";

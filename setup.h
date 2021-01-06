@@ -5,7 +5,7 @@
 #include <stack>
 #include <cstring>
 #define SDL_MAIN_HANDLED
-#define DEBUG true
+#define DEBUG false
 #include <graphics.h>
 #include "evaluator/evaluator.h"
 #include "draw/menu.h"
