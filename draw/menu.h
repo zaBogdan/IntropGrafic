@@ -12,8 +12,11 @@ struct coord{
 };
 extern coord mouseC;
 extern int activePage;
-
+extern char input[];
 
 void mainLoop(vector<string>);
 void primaryPage();
+void inputPage();
 void quit();
+void thirdPage();
+void secondaryPage();

@@ -1,0 +1,18 @@
+//
+// Created by Bogdan Zavadovschi on 07.01.2021.
+//
+#pragma once
+#include "../setup.h"
+#include "pages.h"
+#include "draw.h"
+using namespace std;
+const int maxWidth = 1024;
+const int maxHeigh = 768;
+const int frames=80;
+extern int activePage;
+
+void initialSetup();
+void graphic();
+void exitGraphic();
+int gameLoop(coord mouse, char);
+void mainMenuPage(coord mouse);

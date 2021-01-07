@@ -122,6 +122,7 @@ void drawf (int a, int b, double unitax, int lgx, int lgy, double zoom, int tx, 
 }
 void drawGraph(vector<string> postfix)
 {
+
     /**
      * TODO: Inputul trebuie mutat pe partea grafica
      * TODO: Trebuie realizata desenarea functiei dupa modelul cu initgraph

@@ -1937,7 +1937,7 @@ int bgi_getch (void)
       return (int) key;
     //handle the SHIFT input
     if(SDL_KEYDOWN == type && (key==KEY_LEFT_SHIFT || key==KEY_RIGHT_SHIFT))
-        return 15;
+        return (int)key;
   } while (1);
 
   // we should never get here...

@@ -3,33 +3,37 @@
 //
 
 #include "elements.h"
+int isShiftUp = 0;
+char input[100] = " \0";
+int i=0;
 
-bool inFocus(int x,int y,int textW, int textH)
+bool inFocus(coord center,coord mouseInput,int textW, int textH)
 {
-    coord center;
-    center.x = x;
-    center.y = y;
-    int x1 = x-textW/2-2*defaultSizeX; //left
-    int x2 = x+textW/2+defaultSizeX+10; //right
-    int y1 = y-textH/2-defaultSizeY; //top
-    int y2 = y+textH+2*defaultSizeY+10; //bottom
-    if(mouseC.x>=x1 && mouseC.x<=x2)
-        if(mouseC.y>=y1 && mouseC.y<=y2)
+    int x1 = center.x-textW/2-2*defaultSizeX; //left
+    int x2 = center.x+textW/2+defaultSizeX+10; //right
+    int y1 = center.y-textH/2-defaultSizeY; //top
+    int y2 = center.y+textH+2*defaultSizeY+10; //bottom
+    if(mouseInput.x>=x1 && mouseInput.x<=x2)
+        if(mouseInput.y>=y1 && mouseInput.y<=y2)
             return true;
     return false;
 }
 
-void drawButton(int x, int y,char text[20],int aPage)
+void drawButton(int x, int y,coord mouseInput, char text[20],int aPage)
 {
+    //debug
     setcolor(WHITE);
     int font = 0;
     int direction = 0;
     int font_size = 2;
     settextstyle(font,direction, 2*font_size);
-    bool focus = inFocus(x,y,textwidth(text),textheight(text));
+    coord point;
+    point.x=x;
+    point.y=y;
+    bool focus = inFocus(point,mouseInput,textwidth(text),textheight(text));
     if(focus)
     {
-        setcolor(COLOR(104, 137, 255));
+        setcolor(buttonFocusColor);
         line(x-textwidth(text)/2-10, y+defaultSizeY+textheight(text), x+textwidth(text)/2+10, y+defaultSizeY+textheight(text));
         if(ismouseclick(WM_LBUTTONDOWN) || ismouseclick((WM_RBUTTONDOWN)))
         {
@@ -50,73 +54,62 @@ void drawButton(int x, int y,char text[20],int aPage)
     settextstyle(0,0, 0);
 }
 
-void inputText(int x, int y, int maxLength)
+void textInputBar(coord start, coord mouse)
 {
-    int isShiftUp = 0;
+//    char warning[] = "Warning! You are in input mode! To leave please press `esc` or if you want to finish press `enter`.";
+//    char explain[] = "Being in input mode means that you can't do anything else!";
+//    outtextxy(start.x+30,start.y-50, warning);
+//    outtextxy(start.x+30,start.y-30, explain);
+    rectangle(start.x, start.y, start.x+600, start.y+50);
     setcolor(WHITE);
     settextstyle(0,0,2);
-    rectangle(x,y-20, x+500, y+20);
-    int i=0;
-    char input[]=" \0";
-    //cout << "[Input] Starting the input module!\n";
-    int curr = 0;
-
-
-}
-
-
-void inputTextOLD(int x, int y)
-{
-
-
-
-    int isShiftUp = 0;
-    setcolor(WHITE);
-    int font = 0;
-    int direction = 0;
-    int font_size = 2;
-    settextstyle(font,direction, font_size);
-    rectangle(x,y-20, x+500, y+20);
-    char ch = getch();
-    //enter -> 13
-    //backspace -> 8
-    char input[100]=" \0";
-    int i=0;
-    while(ch != 13 && i<100)
+    if(kbhit())
     {
+        char ch = getch();
+        cout << (int)ch << endl;
+        if(ch==13)
+            return;
+        if(i>maxLength)
+            return;
+        //backspace check
         if(ch==8)
         {
             input[--i]='\0';
             clearviewport();
-        }else if(ch!=15)
+        }
+        //ordinary chars check
+        else if(ch!=15)
         {
-            if(isShiftUp)
+            //shift check
+            if (isShiftUp)
             {
-                bool ok=true;
-                if(ch-'0'>=0 && ch-'0'<=9)
-                    ch = ch-'0';
-                else if(ch=='=')
+                //for shift+(0-9)
+                bool ok = true;
+                if (ch - '0' >= 0 && ch - '0' <= 9)
+                    ch = ch - '0';
+                    //for `=`
+                else if (ch == '=')
                     ch = 10;
+                    //if we pressed shift but it was a miss match we just skip
                 else
                     ok = false;
-                if(ok)
+                if (ok)
                 {
                     ch = shiftKeys[ch];
                 }
-                isShiftUp=0;
+                isShiftUp = 0;
             }
-            input[i++]=ch;
-            input[i]='\0';
-
+            //adding the input
+            input[i++] = ch;
+            input[i] = '\0';
         }
         else
         {
+            //if we pressed shift we will handle this next time
             isShiftUp=1;
         }
         cout << "Shift is now: " << isShiftUp << endl;
         cout << "[INPUT] Your string is: "<< input << endl;
-        outtextxy(100, 100, input);
-
-        ch = getch();
+        outtextxy(start.x+10, start.y+20, input);
     }
 }

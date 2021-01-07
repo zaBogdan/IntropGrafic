@@ -3,8 +3,7 @@
 //
 #pragma once
 #include "../setup.h"
-#include "menu.h"
-
+#include "main.h"
 const int  unitaxpx=30;
 const double unitf=0.01;
 

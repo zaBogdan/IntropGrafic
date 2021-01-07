@@ -6,38 +6,17 @@
 coord mouseC;
 int activePage = 0;
 int alreadyRenderedGraph = 0;
+char input[]=" \0";
 
-void  drawPage()
+void  inputPage()
 {
     setactivepage(1);
-
-    //inputText(100,100);
-    //cout << "I will continue to render other shit!\n";
-//    drawButton(maxWidth-200, 100, "Back", 0);
+    //back button
+    drawButton(maxWidth-30, 20, "<",0);
+    inputText(100,100);
 }
 
 
-void secondaryPage()
-{
-    setactivepage(2);
-    drawButton(30, 20, "<",0);
-    char title[] = "This are your settings";
-    settextstyle(0,0,4);
-    outtextxy(maxWidth/2-textwidth(title)/2,100, title);
-    settextstyle(0,0,0);
-
-}
-void thirdPage()
-{
-    setactivepage(3);
-    drawButton(30, 20, "<",0);
-    char title[] = "Drawing a graph";
-    settextstyle(0,0,4);
-    outtextxy(maxWidth/2-textwidth(title)/2,100, title);
-    settextstyle(0,0,0);
-    char basic[] = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas a ex sodales, facilisis justo ut, blandit metus. Nunc non efficitur justo. Vestibulum at dictum libero. Maecenas placerat libero quis purus dapibus, id laoreet mauris sodales. Pellentesque et auctor sapien, vitae eleifend mi. Nullam massa enim, placerat a nunc in, eleifend facilisis nisl. Proin sit amet placerat leo. Vestibulum sit amet leo id dolor egestas congue.";
-    outtextxy(50,400, basic);
-}
 void mainLoop(vector<string> postfix)
 {
 
@@ -48,6 +27,7 @@ void mainLoop(vector<string> postfix)
     cleardevice();
     clearviewport();
 
+    inputPage();
     secondaryPage();
     primaryPage();
 
@@ -65,9 +45,9 @@ void mainLoop(vector<string> postfix)
         {
             activePage=1;
 
-            drawPage();
+            inputPage();
             alreadyRenderedGraph=1;
-            drawGraph(postfix);
+            //drawGraph(postfix);
         }
         if(activePage==2)
         {
@@ -101,6 +81,27 @@ void mainLoop(vector<string> postfix)
 void quit()
 {
     closegraph();
+}
+void secondaryPage()
+{
+    setactivepage(2);
+    drawButton(30, 20, "<",0);
+    char title[] = "This are your settings";
+    settextstyle(0,0,4);
+    outtextxy(maxWidth/2-textwidth(title)/2,100, title);
+    settextstyle(0,0,0);
+
+}
+void thirdPage()
+{
+    setactivepage(3);
+    drawButton(30, 20, "<",0);
+    char title[] = "Drawing a graph";
+    settextstyle(0,0,4);
+    outtextxy(maxWidth/2-textwidth(title)/2,100, title);
+    settextstyle(0,0,0);
+    char basic[] = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas a ex sodales, facilisis justo ut, blandit metus. Nunc non efficitur justo. Vestibulum at dictum libero. Maecenas placerat libero quis purus dapibus, id laoreet mauris sodales. Pellentesque et auctor sapien, vitae eleifend mi. Nullam massa enim, placerat a nunc in, eleifend facilisis nisl. Proin sit amet placerat leo. Vestibulum sit amet leo id dolor egestas congue.";
+    outtextxy(50,400, basic);
 }
 void primaryPage()
 {
