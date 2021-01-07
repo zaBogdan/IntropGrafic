@@ -5,10 +5,14 @@
 #include "menu.h"
 coord mouseC;
 int activePage = 0;
+int alreadyRenderedGraph = 0;
 
 void  drawPage()
 {
     setactivepage(1);
+
+    //inputText(100,100);
+    //cout << "I will continue to render other shit!\n";
 //    drawButton(maxWidth-200, 100, "Back", 0);
 }
 
@@ -49,6 +53,7 @@ void mainLoop(vector<string> postfix)
 
     do
     {
+
         mouseC.x=mousex();
         mouseC.y=mousey();
         if(ismouseclick(WM_LBUTTONDOWN))
@@ -59,7 +64,9 @@ void mainLoop(vector<string> postfix)
         if(activePage==1)
         {
             activePage=1;
+
             drawPage();
+            alreadyRenderedGraph=1;
             drawGraph(postfix);
         }
         if(activePage==2)
@@ -83,6 +90,8 @@ void mainLoop(vector<string> postfix)
             break;
         }
         setvisualpage(activePage);
+        //when we need to get input we can't have delay!
+        if(activePage!=1)
         delay(1000/frames);
     }
     while (true);

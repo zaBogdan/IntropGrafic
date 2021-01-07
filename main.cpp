@@ -24,7 +24,7 @@ string readFunction2()
 //int argc, char* args[]
 double f(double x)
 {
-    return log(cos(x+sin(pow(x,2)+sqrt(x/10+pow(x,20)+10*x)))+pow(10.02,2))+10*x+10/x;
+    return cos(x+sin(exp(x)+-x)*10);
 }
 
 int main() {
