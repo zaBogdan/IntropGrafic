@@ -65,6 +65,8 @@ void textInputBar(coord start, coord mouse)
     {
         char ch = getch();
         cout << (int)ch << endl;
+        if(ch==-31)
+            ch=15;
         if(ch==13)
             return;
         if(i>maxLength)
