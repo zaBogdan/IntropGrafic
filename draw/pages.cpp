@@ -4,17 +4,16 @@
 
 #include "pages.h"
 
+
 void mainMenuPage(coord mouse)
 {
-    setactivepage(0);
-    char title[100] = "Grafic";
-    char projectSubtitle[100] = "We are the new Desmos";
     char imagePath[100] = "../assets/logo.bmp";
-    char draw[100] = "Draw";
-    char set[100] = "Settings";
-    char inf[100] = "Information";
-    char quit[100] = "Quit";
-    char buildVersion[100] = "Debug build 0.5";
+
+    setactivepage(0);
+
+    char title[100],projectSubtitle[100],draw[100];
+    char set[100],inf[100],quit[100],buildVersion[100];
+
     strcpy(projectSubtitle, language["projectSubtitle"].c_str());
     strcpy(draw, language["draw"].c_str());
     strcpy(set, language["settings"].c_str());
@@ -52,21 +51,10 @@ void inputFunction(coord mouse)
 
 void settingsPage(coord mouse)
 {
-    char pageName[100] = "Settings";
-    char lang[100] = "Your lange is: ";
-    char axis_arrows[100] = "Arrows to axis: ";
-    char axis_numbers[100] = "Add numers to axis: ";
-    char minor_gridlines[100] = "Minor gridlines: ";
-    char measure[100] = "Measure in: ";
-    char english[100] = "English";
-    char romanian[100] = "Romanian";
-    char yes[100] = "Yes";
-    char no[100] = "No";
-    char radians[100] = "Radians";
-    char degrees[100] = "Degrees";
-    char save[100] = "Save";
-    char failedToSave[100] = "There was an error while trying to save the configuration! Please try again!";
-    char savedSuccessfull[100] = "Your settings have been saved successfully!";
+    char pageName[100],lang[100],axis_arrows[100],axis_numbers[100];
+    char minor_gridlines[100],measure[100],english[100],romanian[100];
+    char yes[100],no[100],radians[100],degrees[100],save[100];
+    char failedToSave[100],savedSuccessfull[100];
 
     strcpy(pageName, language["settingsPage"].c_str());
     pageInit(2, pageName, mouse);

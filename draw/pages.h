@@ -11,3 +11,4 @@ void mainMenuPage(coord);
 void settingsPage(coord);
 void informationPage(coord);
 void inputFunction(coord mouse);
+char* stringtochar(string);
