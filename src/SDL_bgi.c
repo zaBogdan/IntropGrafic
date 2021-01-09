@@ -1892,56 +1892,53 @@ int getbkcolor (void)
 
 int bgi_getch (void)
 {
-  // Waits for a key and returns its ASCII value or code,
-  // or QUIT if the user asked to close the window
+    // Waits for a key and returns its ASCII value or code,
+    // or QUIT if the user asked to close the window
 
-  int
-    key, type;
+    int
+            key, type;
 
 #if 0
-  // graphics not initialised yet?
+    // graphics not initialised yet?
   if (0 == bgi_num_windows)
     return (getchar ());
 #endif
 
-  refresh ();
+    refresh ();
 
-  if (bgi_window_is_hidden)
-    return (getchar ());
+    if (bgi_window_is_hidden)
+        return (getchar ());
 
-  // any pending keypresses by kbhit()?
-  if (SDL_TRUE == bgi_key_pressed) {
-    bgi_key_pressed = SDL_FALSE;
-    return bgi_last_key_pressed;
-  }
+    // any pending keypresses by kbhit()?
+    if (SDL_TRUE == bgi_key_pressed) {
+        bgi_key_pressed = SDL_FALSE;
+        return bgi_last_key_pressed;
+    }
 
-  do {
-    key = getevent ();
-    type = eventtype ();
+    do {
+        key = getevent ();
+        type = eventtype ();
 
-    if (QUIT == type)
-      return QUIT;
+        if (QUIT == type)
+            return QUIT;
 
-    if (SDL_KEYDOWN == type &&
-        key != KEY_LEFT_CTRL &&
-        key != KEY_RIGHT_CTRL &&
-        key != KEY_LEFT_SHIFT &&
-        key != KEY_RIGHT_SHIFT &&
-        key != KEY_LEFT_ALT &&
-        key != KEY_RIGHT_ALT &&
-        key != KEY_CAPSLOCK &&
-        key != KEY_LGUI &&
-        key != KEY_RGUI &&
-        key != KEY_MENU &&
-        key != KEY_ALT_GR) // can't catch AltGr!
-      return (int) key;
-    //handle the SHIFT input
-    if(SDL_KEYDOWN == type && (key==KEY_LEFT_SHIFT || key==KEY_RIGHT_SHIFT))
-        return (int)key;
-  } while (1);
+        if (SDL_KEYDOWN == type &&
+            key != KEY_LEFT_CTRL &&
+            key != KEY_RIGHT_CTRL &&
+            key != KEY_LEFT_SHIFT &&
+            key != KEY_RIGHT_SHIFT &&
+            key != KEY_LEFT_ALT &&
+            key != KEY_RIGHT_ALT &&
+            key != KEY_CAPSLOCK &&
+            key != KEY_LGUI &&
+            key != KEY_RGUI &&
+            key != KEY_MENU &&
+            key != KEY_ALT_GR) // can't catch AltGr!
+            return (int) key;
+    } while (1);
 
-  // we should never get here...
-  return 0;
+    // we should never get here...
+    return 0;
 
 } // bgi_getch ()
 
