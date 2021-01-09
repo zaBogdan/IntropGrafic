@@ -4,6 +4,7 @@
 
 #include "main.h"
 int activePage=0;
+settings userSettings;
 
 int gameLoop(coord mouse, char key)
 {
@@ -29,6 +30,16 @@ int gameLoop(coord mouse, char key)
 void graphic()
 {
     initialSetup();
+    loadSettings("default");
+
+    if(!userSettings.initialized)
+    {
+        cout << "[Graphics] Failed to initialize settings! Exiting...\n";
+        return;
+    }
+    string lang = userSettings.language;
+    loadLanguage(userSettings.language);
+
     coord mouseInput;
     char keyBoardInput=' ';
     while(true)
@@ -44,7 +55,29 @@ void graphic()
         //we re-render only when necessary.
         if(gameLoop(mouseInput, keyBoardInput)==-1)
             break;
-
+        if(userSettings.isModified)
+        {
+            cout << "[Settings] A modification has occured! Changes must happen!\n";
+            if(lang!=userSettings.language)
+            {
+                cout << "[Settings] Changing the language!\n";
+                for(int i=0;i<4;i++)
+                {
+                    setactivepage(i);
+                    clearviewport();
+                    setvisualpage(i);
+                }
+                setvisualpage(activePage);
+                if(!loadLanguage(userSettings.language))
+                {
+                    userSettings.language=lang;
+                    cout << "[Language] Couldn't load the file `" << userSettings.language << ".lang` switching back to last language!\n";
+                }
+                loadLanguage(userSettings.language);
+                lang = userSettings.language;
+            }
+            userSettings.isModified = false;
+        }
         setvisualpage(activePage);
         delay(1000/frames);
     }

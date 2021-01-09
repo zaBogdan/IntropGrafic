@@ -19,23 +19,21 @@ bool inFocus(coord center,coord mouseInput,int textW, int textH)
     return false;
 }
 
-void drawButton(int x, int y,coord mouseInput, char text[20],int aPage)
+void drawButton(int x, int y,coord mouseInput, char text[20],int aPage,int font_size, int active)
 {
-    //debug
     setcolor(WHITE);
     int font = 0;
     int direction = 0;
-    int font_size = 2;
     settextstyle(font,direction, 2*font_size);
     coord point;
     point.x=x;
     point.y=y;
     bool focus = inFocus(point,mouseInput,textwidth(text),textheight(text));
-    if(focus)
+    if(focus || active)
     {
         setcolor(buttonFocusColor);
         line(x-textwidth(text)/2-10, y+defaultSizeY+textheight(text), x+textwidth(text)/2+10, y+defaultSizeY+textheight(text));
-        if(ismouseclick(WM_LBUTTONDOWN) || ismouseclick((WM_RBUTTONDOWN)))
+        if((ismouseclick(WM_LBUTTONDOWN) || ismouseclick(WM_RBUTTONDOWN)) && focus)
         {
             cout << "[BUTTON] Active page set to: " << aPage << endl;
             activePage = aPage;
@@ -44,7 +42,7 @@ void drawButton(int x, int y,coord mouseInput, char text[20],int aPage)
     }
     outtextxy(x-textwidth(text)/2, y, text);
 
-    if(!focus)
+    if(!focus && !active)
     {
         setcolor(BLACK);
         line(x-textwidth(text)/2-10, y+defaultSizeY+textheight(text), x+textwidth(text)/2+10, y+defaultSizeY+textheight(text));

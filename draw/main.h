@@ -3,6 +3,7 @@
 //
 #pragma once
 #include "../setup.h"
+#include "settings.h"
 #include "pages.h"
 #include "draw.h"
 using namespace std;
@@ -10,9 +11,10 @@ const int maxWidth = 1024;
 const int maxHeigh = 768;
 const int frames=80;
 extern int activePage;
+extern settings userSettings;
 
 void initialSetup();
 void graphic();
 void exitGraphic();
-int gameLoop(coord mouse, char);
-void mainMenuPage(coord mouse);
+int gameLoop(coord, char);
+void mainMenuPage(coord);
