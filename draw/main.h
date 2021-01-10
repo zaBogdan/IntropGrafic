@@ -9,10 +9,12 @@
 using namespace std;
 const int maxWidth = 1024;
 const int maxHeigh = 768;
-const int frames=120;
+const int frames=80;
 extern int activePage;
 extern settings userSettings;
 extern int isShiftUp;
+extern vector<string> postfix;
+
 
 void initialSetup();
 void graphic();

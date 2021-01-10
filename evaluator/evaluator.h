@@ -5,6 +5,7 @@
 #include "tokenize.h"
 #include "postfixValidator.h"
 using namespace std;
+extern unordered_map<double, double> values;
 
 /**
  * Getting the postfix version and validate it

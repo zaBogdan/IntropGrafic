@@ -6,6 +6,7 @@
 int activePage=0;
 int isShiftUp=0;
 settings userSettings;
+vector<string> postfix;
 
 int gameLoop(coord mouse, char key)
 {
@@ -20,8 +21,9 @@ int gameLoop(coord mouse, char key)
         informationPage(mouse);
     //go to input function(s) page
     if(activePage==1)
-        inputFunction(mouse);
-
+        inputFunction(mouse, key);
+    if(activePage==4)
+        drawGraph(postfix);
     //handle the exit logic
     if(activePage==-1)
         return -1;
@@ -45,17 +47,19 @@ void graphic()
     char keyBoardInput=' ';
     while(true)
     {
+        //get mouse input
         mouseInput= coord{mousex(),mousey()};
         if(ismouseclick(WM_LBUTTONDOWN))
         {
 //            IDK WHY THIS MUST BE HERE????
         }
+        //get keyboard input
+        keyBoardInput=kbhit();
 
-        if(keyBoardInput==0)
-            break;
         //we re-render only when necessary.
         if(gameLoop(mouseInput, keyBoardInput)==-1)
             break;
+        //handle the settings
         if(userSettings.isModified)
         {
             cout << "[Settings] A modification has occured! Changes must happen!\n";

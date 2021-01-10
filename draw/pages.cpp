@@ -39,14 +39,17 @@ void mainMenuPage(coord mouse)
     settextstyle(0,0,0);
     outtextxy(maxWidth-textwidth(buildVersion)-30,maxHeigh-30, buildVersion);
 }
-void inputFunction(coord mouse)
+void inputFunction(coord mouse, char key)
 {
     char pageName[100] = "Input function";
 
     pageInit(1, pageName, mouse);
     setvisualpage(1);
     //input this and then compute the postfix version and print the c++ header
-    textInputBar(coord{100,400}, mouse);
+    textInputBar(coord{100,400}, mouse,key);
+    char backButton[] = "Go";
+    //back button
+    drawButton(500,500,mouse,backButton,4);
 }
 
 void settingsPage(coord mouse)
