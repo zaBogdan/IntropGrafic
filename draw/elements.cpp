@@ -3,7 +3,6 @@
 //
 
 #include "elements.h"
-int isShiftUp = 0;
 char input[100] = " \0";
 int i=0;
 
@@ -61,10 +60,11 @@ void textInputBar(coord start, coord mouse)
     rectangle(start.x, start.y, start.x+600, start.y+50);
     setcolor(WHITE);
     settextstyle(0,0,2);
-    if(kbhit())
+    char ch = kbhit();
+    if(ch)
     {
-        char ch = getch();
-        cout << (int)ch << endl;
+//        char ch = getch();
+        cout << "Char: " << ch << " int: " << (int)ch << endl;
         if(ch==-31)
             ch=15;
         if(ch==13)

@@ -2647,7 +2647,7 @@ int kbhit (void)
           key != SDLK_APPLICATION) {
 	bgi_key_pressed = SDL_TRUE;
 	bgi_last_key_pressed = (int) key;
-        return SDL_TRUE;
+        return bgi_last_key_pressed;
       }
       else
         return SDL_FALSE;

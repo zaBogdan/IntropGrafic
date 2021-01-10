@@ -4,6 +4,7 @@
 
 #include "main.h"
 int activePage=0;
+int isShiftUp=0;
 settings userSettings;
 
 int gameLoop(coord mouse, char key)
@@ -87,8 +88,8 @@ void initialSetup()
 {
     /* select driver and mode that supports multiple pages */
     int gdriver = EGA, gmode = EGAHI, errorcode;
-    int x, y, ht;
-    initgraph(&gdriver,&gmode, "test");
+    char t[] = "test";
+    initgraph(&gdriver,&gmode, t);
     cleardevice();
     clearviewport();
 }
