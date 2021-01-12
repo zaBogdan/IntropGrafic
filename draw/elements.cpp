@@ -3,7 +3,6 @@
 //
 
 #include "elements.h"
-int isShiftUp = 0;
 char input[100] = " \0";
 int i=0;
 
@@ -52,7 +51,7 @@ void drawButton(int x, int y,coord mouseInput, char text[20],int aPage,int font_
     settextstyle(0,0, 0);
 }
 
-void textInputBar(coord start, coord mouse)
+void textInputBar(coord start, coord mouse, char ch)
 {
 //    char warning[] = "Warning! You are in input mode! To leave please press `esc` or if you want to finish press `enter`.";
 //    char explain[] = "Being in input mode means that you can't do anything else!";
@@ -61,12 +60,16 @@ void textInputBar(coord start, coord mouse)
     rectangle(start.x, start.y, start.x+600, start.y+50);
     setcolor(WHITE);
     settextstyle(0,0,2);
-    if(kbhit())
+//    char ch = kbhit();
+    if(ch)
     {
         char ch = getch();
         cout << (int)ch << endl;
-        if(ch==-31 || ch==-27)
-            ch=15;
+        if (ch == -31 || ch == -27)
+        {
+            cout << "Char: " << ch << " int: " << (int)ch << endl;
+            ch = 15;
+        }
         if(ch==13)
         {
             activePage=4;

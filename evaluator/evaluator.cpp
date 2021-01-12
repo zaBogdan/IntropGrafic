@@ -1,4 +1,5 @@
 #include "evaluator.h"
+unordered_map<double, double> values;
 
 vector<string> buildAndValidatePostfix(string func)
 {
@@ -90,6 +91,13 @@ string getCPPNotation(vector<string> postfix)
 
 double getValueFromPostfix(vector<string> postfix, double x)
 {
+    if(values[x])
+    {
+        if(DEBUG==true)
+            cout << "[Caching] Already calculed value for " << x << " returning.\n";
+        return values[x];
+    }
+
     map<string, function<double(double,double)>> funcs2 = {
             {"pow", [](double x, double y){return pow(x,y);}},
             {"fmod", [](double x,double y){return fmod(x,y);}},
@@ -164,5 +172,8 @@ double getValueFromPostfix(vector<string> postfix, double x)
             s.push(aval);
         }
     }
+    if(DEBUG==true)
+        cout << "[Caching] New value added for " << x << " to the vector!\n";
+    values[x] = s.top();
     return s.top();
 }

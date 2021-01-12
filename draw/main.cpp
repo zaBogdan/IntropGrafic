@@ -4,7 +4,9 @@
 
 #include "main.h"
 int activePage=0;
+int isShiftUp=0;
 settings userSettings;
+vector<string> postfix;
 
 int gameLoop(coord mouse, char key, vector<string> postfix)
 {
@@ -19,7 +21,7 @@ int gameLoop(coord mouse, char key, vector<string> postfix)
         informationPage(mouse);
     //go to input function(s) page
     if(activePage==1)
-        inputFunction(mouse);
+        inputFunction(mouse, key);
     if(activePage==4)
         drawPage(mouse, postfix);
 
@@ -46,17 +48,19 @@ void graphic(vector<string> postfix)
     char keyBoardInput=' ';
     while(true)
     {
+        //get mouse input
         mouseInput= coord{mousex(),mousey()};
         if(ismouseclick(WM_LBUTTONDOWN))
         {
 //            IDK WHY THIS MUST BE HERE????
         }
+        //get keyboard input
+        keyBoardInput=kbhit();
 
-        if(keyBoardInput==0)
-            break;
         //we re-render only when necessary.
         if(gameLoop(mouseInput, keyBoardInput, postfix)==-1)
             break;
+        //handle the settings
         if(userSettings.isModified)
         {
             cout << "[Settings] A modification has occured! Changes must happen!\n";
@@ -89,8 +93,8 @@ void initialSetup()
 {
     /* select driver and mode that supports multiple pages */
     int gdriver = EGA, gmode = EGAHI, errorcode;
-    int x, y, ht;
-    initgraph(&gdriver,&gmode, "test");
+    char t[] = "test";
+    initgraph(&gdriver,&gmode, t);
     cleardevice();
     clearviewport();
 }

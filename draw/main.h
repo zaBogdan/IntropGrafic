@@ -12,6 +12,9 @@ const int maxHeigh = 768;
 const int frames=80;
 extern int activePage;
 extern settings userSettings;
+extern int isShiftUp;
+extern vector<string> postfix;
+
 
 void initialSetup();
 void graphic(vector<string> postfix);
