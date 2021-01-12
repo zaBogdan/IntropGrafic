@@ -14,7 +14,7 @@ extern int activePage;
 extern settings userSettings;
 
 void initialSetup();
-void graphic();
+void graphic(vector<string> postfix);
 void exitGraphic();
-int gameLoop(coord, char);
+int gameLoop(coord, char, vector <string> postfix);
 void mainMenuPage(coord);

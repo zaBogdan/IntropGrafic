@@ -49,6 +49,21 @@ void inputFunction(coord mouse)
     //input this and then compute the postfix version and print the c++ header
     textInputBar(coord{100,400}, mouse);
 }
+void drawPage(coord mouse, vector<string> postfix)
+{
+    char pageName[100] = "Draw";
+    pageInit(5, pageName, mouse);
+    //setactivepage(1);
+    //setactivepage(4);
+    //cleardevice();
+    cleardevice();
+    drawGraph(postfix);
+    //line(100, 0, 100, 100);
+    delay(1000);
+    cleardevice();
+
+    activePage=0;
+}
 
 void settingsPage(coord mouse)
 {

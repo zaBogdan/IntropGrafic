@@ -2,6 +2,9 @@
 // Created by Ilinca on 12/13/2020.
 //
 #include "draw.h"
+#include "main.h"
+#include "pages.h"
+
 
 void nrsir (double n, char s[])
 {
@@ -80,38 +83,46 @@ void drawaxes (int a, int b, int lgx, int lgy,  double &unitax, int &unitaxpx, i
     for(int i=lgx/2+unitaxpx; tr(i,   tx)<=lgx; i+=unitaxpx)
     {
         line(tr(i,   tx), tr(lgy/2-3,   ty), tr(i,   tx), tr(lgy/2+3, ty));
-        nrsir(k, sir);
-        outtextxy(tr(i, tx), tr(lgy/2+3, ty), sir);
-        k += unitax;
+        if(userSettings.axis_numbers) {
+            nrsir(k, sir);
+            outtextxy(tr(i, tx), tr(lgy / 2 + 3, ty), sir);
+            k += unitax;
+        }
     }
     k=-unitax;
     for(int i=lgx/2-unitaxpx; tr(i,   tx)>=0; i-=unitaxpx)
     {   line(tr(i,   tx), tr(lgy/2-3,   ty), tr(i,   tx), tr(lgy/2+3,   ty));
-        nrsir(k, sir);
-        outtextxy(tr(i,   tx), tr(lgy/2+3,   ty), sir);
-        k -= unitax;
+        if(userSettings.axis_numbers) {
+            nrsir(k, sir);
+            outtextxy(tr(i, tx), tr(lgy / 2 + 3, ty), sir);
+            k -= unitax;
+        }
     }
     k=-unitax;
     for(int i=lgy/2+unitaxpx; tr(i,   ty)<=lgy; i+=unitaxpx)
     {   line(tr(lgx/2-3, tx), tr(i,   ty), tr(lgx/2+3, tx), tr(i,   ty));
-        nrsir(k, sir);
-        outtextxy(tr(lgx/2+3, tx), tr(i,   ty), sir);
-        k -= unitax;
+        if(userSettings.axis_numbers) {
+            nrsir(k, sir);
+            outtextxy(tr(lgx / 2 + 3, tx), tr(i, ty), sir);
+            k -= unitax;
+        }
     }
     k=unitax;
     for(int i=lgy/2-unitaxpx; tr(i,   ty)>=0; i-=unitaxpx)
     {   line(tr(lgx/2-3, tx), tr(i,   ty), tr(lgx/2+3, tx), tr(i,   ty));
-        nrsir(k, sir);
-        outtextxy(tr(lgx/2+3, tx), tr(i,   ty), sir);
-        k += unitax;
+        if(userSettings.axis_numbers) {
+            nrsir(k, sir);
+            outtextxy(tr(lgx / 2 + 3, tx), tr(i, ty), sir);
+            k += unitax;
+        }
     }
-    outtextxy(tr(lgx/2+3, tx), tr(lgy/2+3,   ty), "0");
+    if(userSettings.axis_numbers) outtextxy(tr(lgx/2+3, tx), tr(lgy/2+3,   ty), "0");
 
 }
 
-///Functie temporara pentru teste
 double func(double n, vector<string> postfix)
 {
+    //return n*n;
     return getValueFromPostfix(postfix,n);
 }
 
@@ -119,7 +130,9 @@ double func(double n, vector<string> postfix)
 void drawf (int a, int b, double &unitax, int &unitaxpx, int lgx, int lgy, int tx, int ty,vector<string> postfix) {
 
     cleardevice();
-    drawaxes(a, b, lgx, lgy, unitax, unitaxpx, tx, ty);
+    //clearviewport();
+    if ( userSettings.axis_arrows == 1)
+        drawaxes(a, b, lgx, lgy, unitax, unitaxpx, tx, ty);
 
 
     ///desenarea graficului
@@ -127,6 +140,12 @@ void drawf (int a, int b, double &unitax, int &unitaxpx, int lgx, int lgy, int t
     double y1 = lgy / 2 - (func(a,postfix) / unitax) * unitaxpx;
     double x2 = lgx / 2 + ((a + unitf) / unitax) * unitaxpx;
     double y2 = lgy / 2 - (func(a + unitf,postfix) / unitax) * unitaxpx;
+
+    outtextxy(20, 700, "Press x to go back");
+    outtextxy(20, 710, "Press i to zoom in");
+    outtextxy(20, 720, "Press o to zoom out");
+    outtextxy(20, 730, "Move with w - up, a - left, s - down, d - right");
+
 
     for (double j = a + 2 * unitf; j <= b; j += unitf) {
         double x3 = (j / unitax) * unitaxpx + lgx / 2;
@@ -151,13 +170,14 @@ void drawf (int a, int b, double &unitax, int &unitaxpx, int lgx, int lgy, int t
 }
 void drawGraph(vector<string> postfix)
 {
+    cleardevice();
 
     /**
      * TODO: Inputul trebuie mutat pe partea grafica
      * TODO: Trebuie realizata desenarea functiei dupa modelul cu initgraph
      * BUG: Butonu de back e inutil momentan.
      */
-    int a = -100, b = 100;
+    int a = -50, b = 50;
     char ch;
     double unitax = 1;
     int unitaxpx = 40;
@@ -165,48 +185,40 @@ void drawGraph(vector<string> postfix)
 //    cout<<"Marginea inferioara a intervalului:"; cin>>a;
 //    cout<<"Marginea superioara a intervalului:"; cin>>b;
 
-    initwindow(850, 850);
-    drawf(a, b, unitax, unitaxpx, 850, 850,  tx, ty, postfix);
+   // initwindow(850, 850);
+    drawf(a, b, unitax, unitaxpx, maxWidth, maxHeigh,  tx, ty, postfix);
     do
     {
         ch=getch();
-        cout << (int)ch << '\n';
+        //cout << (int)ch << '\n';
+
+        //cout <<unitaxpx << '\n';
         switch(ch)
         {
-            case 'n':
-                //zoom=zoom+0.1;
+            case 'i':
                 unitaxpx += 5;
-                drawf(a, b, unitax, unitaxpx, 850, 850,  tx, ty, postfix);
                 break;
-            case 'm':
+            case 'o':
                 unitaxpx -= 5;
-                //zoom=zoom-0.1;
-                drawf(a, b, unitax, unitaxpx, 850, 850,  tx, ty, postfix);
                 break;
             case 'w':
-            case KEY_UP://72 :
                 ty=ty-30;
-                drawf(a, b, unitax, unitaxpx, 850, 850,  tx, ty, postfix);
                 break;
             case 's':
-            case KEY_DOWN://80 :
                 ty=ty+30;
-                drawf(a, b, unitax, unitaxpx, 850, 850,  tx, ty, postfix);
                 break;
             case 'a':
-            case KEY_LEFT://75 :
                 tx=tx-30;
-                drawf(a, b, unitax, unitaxpx, 850, 850,  tx, ty, postfix);
                 break;
             case 'd':
-            case KEY_RIGHT://77 :
                 tx=tx+30;
-                drawf(a, b, unitax, unitaxpx, 850, 850,  tx, ty, postfix);
                 break;
         }
+
+        drawf(a, b, unitax, unitaxpx, maxWidth, maxHeigh,  tx, ty, postfix);
     } while(ch!='x');
-    closegraph();
 
 
 //    closegraph();
+
 }

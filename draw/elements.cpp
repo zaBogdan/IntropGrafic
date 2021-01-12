@@ -68,7 +68,11 @@ void textInputBar(coord start, coord mouse)
         if(ch==-31 || ch==-27)
             ch=15;
         if(ch==13)
+        {
+            activePage=4;
             return;
+        }
+
         if(i>maxLength)
             return;
         //backspace check

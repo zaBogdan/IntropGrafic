@@ -6,7 +6,7 @@
 int activePage=0;
 settings userSettings;
 
-int gameLoop(coord mouse, char key)
+int gameLoop(coord mouse, char key, vector<string> postfix)
 {
     //main page
     if(activePage==0)
@@ -20,6 +20,8 @@ int gameLoop(coord mouse, char key)
     //go to input function(s) page
     if(activePage==1)
         inputFunction(mouse);
+    if(activePage==4)
+        drawPage(mouse, postfix);
 
     //handle the exit logic
     if(activePage==-1)
@@ -27,7 +29,7 @@ int gameLoop(coord mouse, char key)
     return 0;
 }
 
-void graphic()
+void graphic(vector<string> postfix)
 {
     initialSetup();
     loadSettings("default");
@@ -53,7 +55,7 @@ void graphic()
         if(keyBoardInput==0)
             break;
         //we re-render only when necessary.
-        if(gameLoop(mouseInput, keyBoardInput)==-1)
+        if(gameLoop(mouseInput, keyBoardInput, postfix)==-1)
             break;
         if(userSettings.isModified)
         {
@@ -61,7 +63,7 @@ void graphic()
             if(lang!=userSettings.language)
             {
                 cout << "[Settings] Changing the language!\n";
-                for(int i=0;i<4;i++)
+                for(int i=0;i<=5;i++)
                 {
                     setactivepage(i);
                     clearviewport();

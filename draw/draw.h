@@ -5,7 +5,7 @@
 #include "../setup.h"
 #include "main.h"
 //int  unitaxpx=30;
-const double unitf=0.01;
+const double unitf=0.1;
 
 void nrsir (double n, char s[]);
 void drawaxes (int a, int b, int lgx, int lgy,  double &unitax, int &unitaxpx, int tx, int ty);

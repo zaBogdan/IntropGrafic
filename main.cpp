@@ -46,7 +46,7 @@ int main() {
 //        }
 //    }
 //    mainLoop(postfix);
-    graphic();
+    graphic(postfix);
     cout << "[MAIN] This was the end!";
     cout << endl;
     return 0;
