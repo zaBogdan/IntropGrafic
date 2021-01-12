@@ -4,6 +4,7 @@
 #include "draw.h"
 #include "main.h"
 #include "pages.h"
+bool modified=false;
 
 
 void nrsir (double n, char s[])
@@ -122,15 +123,15 @@ void drawaxes (int a, int b, int lgx, int lgy,  double &unitax, int &unitaxpx, i
 
 double func(double n, vector<string> postfix)
 {
-    //return n*n;
+//    return n*n;
     return getValueFromPostfix(postfix,n);
 }
 
 ///Deseneaza functie pe intervalul [a, b] intr-o fereastra de dimensiuni lgx, lgy
 void drawf (int a, int b, double &unitax, int &unitaxpx, int lgx, int lgy, int tx, int ty,vector<string> postfix) {
 
-    cleardevice();
-    //clearviewport();
+//    cleardevice();
+    clearviewport();
     if ( userSettings.axis_arrows == 1)
         drawaxes(a, b, lgx, lgy, unitax, unitaxpx, tx, ty);
 
@@ -171,35 +172,27 @@ void drawf (int a, int b, double &unitax, int &unitaxpx, int lgx, int lgy, int t
 void drawGraph(vector<string> postfix)
 {
     cleardevice();
-
-    /**
-     * TODO: Inputul trebuie mutat pe partea grafica
-     * TODO: Trebuie realizata desenarea functiei dupa modelul cu initgraph
-     * BUG: Butonu de back e inutil momentan.
-     */
-    int a = -50, b = 50;
+    int a = -10, b = 10;
     char ch;
     double unitax = 1;
     int unitaxpx = 40;
     int tx = 0, ty = 0;
-//    cout<<"Marginea inferioara a intervalului:"; cin>>a;
-//    cout<<"Marginea superioara a intervalului:"; cin>>b;
 
-   // initwindow(850, 850);
     drawf(a, b, unitax, unitaxpx, maxWidth, maxHeigh,  tx, ty, postfix);
     do
     {
         ch=getch();
-        //cout << (int)ch << '\n';
-
-        //cout <<unitaxpx << '\n';
+        if(ch=='x')
+            break;
         switch(ch)
         {
             case 'i':
                 unitaxpx += 5;
+                modified=true;
                 break;
             case 'o':
                 unitaxpx -= 5;
+                modified=true;
                 break;
             case 'w':
                 ty=ty-30;
@@ -214,10 +207,10 @@ void drawGraph(vector<string> postfix)
                 tx=tx+30;
                 break;
         }
-
         drawf(a, b, unitax, unitaxpx, maxWidth, maxHeigh,  tx, ty, postfix);
+        modified=false;
     } while(ch!='x');
-
+    cout << "EXECUTING THIS!!!" << endl;
 
 //    closegraph();
 
