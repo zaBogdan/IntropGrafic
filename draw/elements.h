@@ -12,4 +12,4 @@ void drawButton(int , int,coord, char text[20],int, int font_size=2, int active=
 void textInputBar(coord, coord,char);
 
 void inputText(int, int,int maxLength=50);
-void drawHugeText(coord, string);
+void drawHugeText(coord,string);

@@ -89,7 +89,7 @@ string getCPPNotation(vector<string> postfix)
     return s.top();
 }
 
-double getValueFromPostfix(vector<string> postfix, double x)
+double getValueFromPostfix(vector<string> postfix, double x,double start,double finish)
 {
     if(values[x])
     {
@@ -158,12 +158,7 @@ double getValueFromPostfix(vector<string> postfix, double x)
                 s.pop();
                 double left = s.top();
                 s.pop();
-                if(val=="^" && left==M_E)
-                    s.push(funcs["exp"](right));
-                if(val=="^" && left==M_E && right<0)
-                    s.push(funcs["expm1"](right));
-                else
-                    s.push(funcs2[val](left,right));
+                s.push(funcs2[val](left,right));
             }
         }
         else
@@ -178,6 +173,10 @@ double getValueFromPostfix(vector<string> postfix, double x)
     }
     if(DEBUG==true)
         cout << "[Caching] New value added for " << x << " to the vector!\n";
-    values[x] = s.top();
-    return s.top();
+    if(s.top()>=LLONG_MIN && s.top()<=LLONG_MAX)
+    {
+        values[x] = s.top();
+        return s.top();
+    }
+    return 0;
 }

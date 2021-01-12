@@ -41,15 +41,16 @@ void mainMenuPage(coord mouse)
 }
 void inputFunction(coord mouse, char key)
 {
-    char pageName[100] = "Input function";
+    char pageName[100], draw_function[100];
+    strcpy(pageName, language["input_title"].c_str());
+    strcpy(draw_function, language["draw_function"].c_str());
 
     pageInit(1, pageName, mouse);
     setvisualpage(1);
     //input this and then compute the postfix version and print the c++ header
     textInputBar(coord{maxWidth/2,400}, mouse,key);
-    char backButton[] = "Go";
     //back button
-    drawButton(maxWidth/2,500,mouse,backButton,10);
+    drawButton(maxWidth/2,500,mouse,draw_function,10);
     if(activePage==10)
     {
         needsModified=true;
@@ -60,13 +61,10 @@ void drawPage(coord mouse)
 {
     char pageName[100] = "Draw";
     pageInit(5, pageName, mouse);
-//    cout << getactivepage() << endl;
     cleardevice();
     drawGraph();
-    //line(100, 0, 100, 100);
     delay(1000);
     cleardevice();
-
     activePage=1;
 }
 
@@ -162,7 +160,8 @@ void settingsPage(coord mouse)
             userSettings.measure="degrees";
             break;
         case 20:
-            cout << "[Pages] Saving the configuration\n";
+            if(DEBUG==true)
+                cout << "[Pages] Saving the configuration\n";
             settextstyle(0,0,1);
             if(!saveConfiguration("config-1"))
                 outtextxy(maxWidth/2-textwidth(failedToSave)/2, 200, failedToSave);
@@ -183,8 +182,12 @@ void settingsPage(coord mouse)
 void informationPage(coord mouse)
 {
 
-    pageInit(3, "Information", mouse);
-    outtextxy(10,300, "I will write this later.");
+    char information_title[100];
+    strcpy(information_title, language["information_title"].c_str());
+    pageInit(3, information_title, mouse);
+    char information_project_about[1400];
+
+    drawHugeText(coord{10,300}, language["information_project_about"].c_str());
 
 }
 

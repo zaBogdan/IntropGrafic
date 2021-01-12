@@ -168,19 +168,20 @@ pair<double, double> drawaxes (int lgx, int lgy,  double &unitax, int &unitaxpx,
 }
 
 
-double func(double n, vector<string> postfix)
+double func(double n, double start,double finish)
 {
     if(userSettings.measure=="degrees")
-    {
         n = n*(180.0/M_PI);
-
-        cout << "IN grade: " << n << endl;
-    }
-    return getValueFromPostfix(postfix,n);
+    return getValueFromPostfix(postfix,n,start, finish);
 }
 
 ///Deseneaza functie pe intervalul [a, b] intr-o fereastra de dimensiuni lgx, lgy
 void drawf (double &unitax, int &unitaxpx, int lgx, int lgy, int tx, int ty) {
+    char go_back[100],zoom_in[100],zoom_out[100],controls[100];
+    strcpy(go_back, language["go_back"].c_str());
+    strcpy(zoom_in, language["zoom_in"].c_str());
+    strcpy(zoom_out, language["zoom_out"].c_str());
+    strcpy(controls, language["controls"].c_str());
 
     clearviewport();
     pair<double, double> aux = drawaxes(lgx, lgy, unitax, unitaxpx, tx, ty);
@@ -190,19 +191,14 @@ void drawf (double &unitax, int &unitaxpx, int lgx, int lgy, int tx, int ty) {
 
     ///desenarea graficului
     double x1 = lgx / 2 + (a / unitax) * unitaxpx;
-    double y1 = lgy / 2 - (func(a,postfix) / unitax) * unitaxpx;
+    double y1 = lgy / 2 - (func(a,a,b) / unitax) * unitaxpx;
     double x2 = lgx / 2 + ((a + unitf) / unitax) * unitaxpx;
-    double y2 = lgy / 2 - (func(a + unitf,postfix) / unitax) * unitaxpx;
-    setcolor(RED);
-    outtextxy(20, 700, "Press x to go back");
-    outtextxy(20, 710, "Press i to zoom in");
-    outtextxy(20, 720, "Press o to zoom out");
-    outtextxy(20, 730, "Move with w - up, a - left, s - down, d - right");
+    double y2 = lgy / 2 - (func(a + unitf,a,b) / unitax) * unitaxpx;
     setcolor(WHITE);
 
     for (double j = a + 2 * unitf; j <= b; j += unitf) {
         double x3 = (j / unitax) * unitaxpx + lgx / 2;
-        double y3 = lgy / 2 - (func(j,postfix) / unitax) * unitaxpx;
+        double y3 = lgy / 2 - (func(j,a,b) / unitax) * unitaxpx;
 
         if (!((y1 > lgy && y2 < 0) || (y2 > lgy && y1 < 0))) {
             line(tr(x1, tx), tr(y1, ty),
@@ -220,12 +216,15 @@ void drawf (double &unitax, int &unitaxpx, int lgx, int lgy, int tx, int ty) {
         y2 = y3;
 
     }
-
+    setcolor(COLOR(104, 137, 255));
+    char func[100]="f(x)=";
+    strcat(func, cppVersion.c_str());
+    outtextxy(20,690, func);
     setcolor(RED);
-    outtextxy(20, 700, "Press x to go back");
-    outtextxy(20, 710, "Press i to zoom in");
-    outtextxy(20, 720, "Press o to zoom out");
-    outtextxy(20, 730, "Move with w - up, a - left, s - down, d - right");
+    outtextxy(20, 700, go_back);
+    outtextxy(20, 710, zoom_in);
+    outtextxy(20, 720, zoom_out);
+    outtextxy(20, 730, controls);
     setcolor(WHITE);
 }
 void drawGraph()

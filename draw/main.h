@@ -16,6 +16,7 @@ extern int isShiftUp;
 extern vector<string> postfix;
 extern bool needsModified;
 extern char input[100];
+extern string cppVersion;
 
 
 void initialSetup();

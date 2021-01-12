@@ -33,7 +33,8 @@ void drawButton(int x, int y,coord mouseInput, char text[20],int aPage,int font_
         line(x-textwidth(text)/2-10, y+defaultSizeY+textheight(text), x+textwidth(text)/2+10, y+defaultSizeY+textheight(text));
         if((ismouseclick(WM_LBUTTONDOWN) || ismouseclick(WM_RBUTTONDOWN)) && focus)
         {
-            cout << "[BUTTON] Active page set to: " << aPage << endl;
+            if(DEBUG==true)
+                cout << "[BUTTON] Active page set to: " << aPage << endl;
             activePage = aPage;
         }
 
@@ -54,22 +55,24 @@ void textInputBar(coord start, coord mouse, char key)
 {
     int trasholdX=400;
     int trasholdY=30;
-    char explain[] = "To enter in `INPUT` mode please click on the rectangle!";
+    char enter_input[100], warning_input[100],explain_input[100];
+
+    strcpy(enter_input, language["enter_input"].c_str());
+    strcpy(warning_input, language["warning_input"].c_str());
+    strcpy(explain_input, language["explain_input"].c_str());
 
     rectangle(start.x-trasholdX, start.y-trasholdY,start.x+trasholdX,start.y+trasholdY);
     if(inFocus(start,mouse,800,60) && (ismouseclick(WM_LBUTTONDOWN) || ismouseclick(WM_RBUTTONDOWN)))
     {
         setfillstyle(XHATCH_FILL, BLACK);
-        bar(start.x-textwidth(explain)/2-20,start.y-70,start.x+textwidth(explain)/2+20, start.y-45);
+        bar(start.x-textwidth(enter_input)/2-20,start.y-70,start.x+textwidth(enter_input)/2+20, start.y-45);
         setcolor(WHITE);
-        char warning[] = "Warning! You are in input mode! To leave please press `esc` or if you want to finish press `enter`.";
-        char explain[] = "Being in input mode means that you can't do anything else!";
-        outtextxy(start.x-textwidth(warning)/2,start.y-70, warning);
-        outtextxy(start.x-textwidth(explain)/2,start.y-60, explain);
+        outtextxy(start.x-textwidth(warning_input)/2,start.y-70, warning_input);
+        outtextxy(start.x-textwidth(explain_input)/2,start.y-60, explain_input);
     }
     else
     {
-        outtextxy(start.x-textwidth(explain)/2,start.y-60, explain);
+        outtextxy(start.x-textwidth(enter_input)/2,start.y-60, enter_input);
         return;
     }
 
@@ -84,7 +87,6 @@ void textInputBar(coord start, coord mouse, char key)
     while((int)ch!=27)
     {
          ch = getch();
-        cout << (int)ch << ' ' << ch << endl;
         if((int)ch==27)
         {
             clearviewport();
@@ -140,9 +142,23 @@ void textInputBar(coord start, coord mouse, char key)
             //if we pressed shift we will handle this next time
             isShiftUp=1;
         }
-        cout << "Shift is now: " << isShiftUp << endl;
-        cout << "[INPUT] Your string is: "<< input << endl;
+        if(DEBUG==true)
+        {
+            cout << "[INPUT] Shift is now: " << isShiftUp << endl;
+            cout << "[INPUT] Your string is: "<< input << endl;
+        }
         outtextxy(start.x-trasholdX+10, start.y, input);
     }
-    cout << "ESCAPED!";
+}
+
+void drawHugeText(coord pos,string text)
+{
+    int width = maxWidth-100;
+    char ctext[750];
+    strcpy(ctext, text.c_str());
+    int len = textwidth(ctext);
+    int val = len/width;
+    //to be done..
+
+    cout << len << endl;
 }

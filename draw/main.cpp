@@ -9,6 +9,7 @@ settings userSettings;
 vector<string> postfix;
 bool needsModified=false;
 char input[100]= " \0";
+string cppVersion;
 
 int gameLoop(coord mouse, char key)
 {
@@ -72,8 +73,10 @@ void graphic()
             }
             else
             {
-                cout << "[MAIN] The C/C++ notation of this function is: ";
-                cout << getCPPNotation(postfix) << endl;
+                if(DEBUG==true)
+                    cout << "[MAIN] The C/C++ notation of this function is: ";
+                cppVersion=getCPPNotation(postfix);
+                cout << cppVersion << endl;
                 activePage=4;
                 strcpy(input, " \0");
                 clearviewport();
@@ -85,10 +88,12 @@ void graphic()
         //handle the settings
         if(userSettings.isModified)
         {
-            cout << "[Settings] A modification has occured! Changes must happen!\n";
+            if(DEBUG==true)
+                cout << "[Settings] A modification has occured! Changes must happen!\n";
             if(lang!=userSettings.language)
             {
-                cout << "[Settings] Changing the language!\n";
+                if(DEBUG==true)
+                    cout << "[Settings] Changing the language!\n";
                 for(int i=0;i<6;i++)
                 {
                     //5th is valid but 4 isn't.

@@ -7,7 +7,7 @@
 #include <map>
 #include <unordered_map>
 #define SDL_MAIN_HANDLED
-#define DEBUG true
+#define DEBUG false
 #include <graphics.h>
 #ifndef __TYPES_H
 #define __TYPES_H
