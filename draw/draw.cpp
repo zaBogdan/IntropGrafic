@@ -61,10 +61,11 @@ double tr(int coord, int translare)
     return coord+translare;
 }
 
-void drawaxes (int a, int b, int lgx, int lgy,  double &unitax, int &unitaxpx, int tx, int ty)
+pair<double, double> drawaxes (int lgx, int lgy,  double &unitax, int &unitaxpx, int tx, int ty)
 {
     char sir[1000] = {};
     double k=unitax;
+    pair<double, double> interval;
 
     if(unitaxpx >= 80){
         unitaxpx = 40;
@@ -77,63 +78,76 @@ void drawaxes (int a, int b, int lgx, int lgy,  double &unitax, int &unitaxpx, i
     }
 
 ///axele de coordonate
-    line(tr(lgx/2, tx), 0, tr(lgx/2,tx), lgy);
-    line(0, tr(lgy/2,   ty), lgx, tr(lgy/2,ty));
+    interval.first = -(tr(lgx/2, tx) / unitaxpx * unitax + 1);
+    interval.second = (lgx - tr(lgx/2, tx))/unitaxpx * unitax + 1;
+
+    if(userSettings.axis_arrows) {
+        line(tr(lgx / 2, tx), 0, tr(lgx / 2, tx), lgy);
+        line(0, tr(lgy / 2, ty), lgx, tr(lgy / 2, ty));
 
 ///impartirea si notarea axelor
-    for(int i=lgx/2+unitaxpx; tr(i,   tx)<=lgx; i+=unitaxpx)
-    {
-        line(tr(i,   tx), tr(lgy/2-3,   ty), tr(i,   tx), tr(lgy/2+3, ty));
-        if(userSettings.axis_numbers) {
-            nrsir(k, sir);
-            outtextxy(tr(i, tx), tr(lgy / 2 + 3, ty), sir);
+        for (int i = lgx / 2 + unitaxpx; tr(i, tx) <= lgx; i += unitaxpx) {
+            line(tr(i, tx), tr(lgy / 2 - 3, ty), tr(i, tx), tr(lgy / 2 + 3, ty));
+            if (userSettings.axis_numbers) {
+                nrsir(k, sir);
+                outtextxy(tr(i, tx), tr(lgy / 2 + 3, ty), sir);
+
+            }
             k += unitax;
         }
-    }
-    k=-unitax;
-    for(int i=lgx/2-unitaxpx; tr(i,   tx)>=0; i-=unitaxpx)
-    {   line(tr(i,   tx), tr(lgy/2-3,   ty), tr(i,   tx), tr(lgy/2+3,   ty));
-        if(userSettings.axis_numbers) {
-            nrsir(k, sir);
-            outtextxy(tr(i, tx), tr(lgy / 2 + 3, ty), sir);
+
+
+        k = -unitax;
+        for (int i = lgx / 2 - unitaxpx; tr(i, tx) >= 0; i -= unitaxpx) {
+            line(tr(i, tx), tr(lgy / 2 - 3, ty), tr(i, tx), tr(lgy / 2 + 3, ty));
+            if (userSettings.axis_numbers) {
+                nrsir(k, sir);
+                outtextxy(tr(i, tx), tr(lgy / 2 + 3, ty), sir);
+
+            }
             k -= unitax;
         }
-    }
-    k=-unitax;
-    for(int i=lgy/2+unitaxpx; tr(i,   ty)<=lgy; i+=unitaxpx)
-    {   line(tr(lgx/2-3, tx), tr(i,   ty), tr(lgx/2+3, tx), tr(i,   ty));
-        if(userSettings.axis_numbers) {
-            nrsir(k, sir);
-            outtextxy(tr(lgx / 2 + 3, tx), tr(i, ty), sir);
+
+
+        k = -unitax;
+        for (int i = lgy / 2 + unitaxpx; tr(i, ty) <= lgy; i += unitaxpx) {
+            line(tr(lgx / 2 - 3, tx), tr(i, ty), tr(lgx / 2 + 3, tx), tr(i, ty));
+            if (userSettings.axis_numbers) {
+                nrsir(k, sir);
+                outtextxy(tr(lgx / 2 + 3, tx), tr(i, ty), sir);
+
+            }
             k -= unitax;
         }
-    }
-    k=unitax;
-    for(int i=lgy/2-unitaxpx; tr(i,   ty)>=0; i-=unitaxpx)
-    {   line(tr(lgx/2-3, tx), tr(i,   ty), tr(lgx/2+3, tx), tr(i,   ty));
-        if(userSettings.axis_numbers) {
-            nrsir(k, sir);
-            outtextxy(tr(lgx / 2 + 3, tx), tr(i, ty), sir);
+        k = unitax;
+        for (int i = lgy / 2 - unitaxpx; tr(i, ty) >= 0; i -= unitaxpx) {
+            line(tr(lgx / 2 - 3, tx), tr(i, ty), tr(lgx / 2 + 3, tx), tr(i, ty));
+            if (userSettings.axis_numbers) {
+                nrsir(k, sir);
+                outtextxy(tr(lgx / 2 + 3, tx), tr(i, ty), sir);
+
+            }
             k += unitax;
         }
+        if (userSettings.axis_numbers) outtextxy(tr(lgx / 2 + 3, tx), tr(lgy / 2 + 3, ty), "0");
     }
-    if(userSettings.axis_numbers) outtextxy(tr(lgx/2+3, tx), tr(lgy/2+3,   ty), "0");
+
+    return interval;
 
 }
 
 double func(double n, vector<string> postfix)
 {
-//    return n*n;
     return getValueFromPostfix(postfix,n);
 }
 
 ///Deseneaza functie pe intervalul [a, b] intr-o fereastra de dimensiuni lgx, lgy
-void drawf (int a, int b, double &unitax, int &unitaxpx, int lgx, int lgy, int tx, int ty,vector<string> postfix) {
+void drawf (double &unitax, int &unitaxpx, int lgx, int lgy, int tx, int ty,vector<string> postfix) {
 
-//    cleardevice();
     clearviewport();
-    if ( userSettings.axis_arrows == 1)
-        drawaxes(a, b, lgx, lgy, unitax, unitaxpx, tx, ty);
+    pair<double, double> aux = drawaxes(lgx, lgy, unitax, unitaxpx, tx, ty);
+    int a = (int)aux.first;
+    int b = (int)aux.second;
 
 
     ///desenarea graficului
@@ -172,13 +186,12 @@ void drawf (int a, int b, double &unitax, int &unitaxpx, int lgx, int lgy, int t
 void drawGraph(vector<string> postfix)
 {
     cleardevice();
-    int a = -10, b = 10;
     char ch;
     double unitax = 1;
     int unitaxpx = 40;
     int tx = 0, ty = 0;
 
-    drawf(a, b, unitax, unitaxpx, maxWidth, maxHeigh,  tx, ty, postfix);
+    drawf(unitax, unitaxpx, maxWidth, maxHeigh,  tx, ty, postfix);
     do
     {
         ch=getch();
@@ -207,7 +220,7 @@ void drawGraph(vector<string> postfix)
                 tx=tx+30;
                 break;
         }
-        drawf(a, b, unitax, unitaxpx, maxWidth, maxHeigh,  tx, ty, postfix);
+        drawf(unitax, unitaxpx, maxWidth, maxHeigh,  tx, ty, postfix);
         modified=false;
     } while(ch!='x');
     cout << "EXECUTING THIS!!!" << endl;
