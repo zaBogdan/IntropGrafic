@@ -169,7 +169,7 @@ void drawf (int a, int b, double &unitax, int &unitaxpx, int lgx, int lgy, int t
 
     }
 }
-void drawGraph(vector<string> postfix)
+void drawGraph()
 {
     cleardevice();
     int a = -10, b = 10;
@@ -210,8 +210,7 @@ void drawGraph(vector<string> postfix)
         drawf(a, b, unitax, unitaxpx, maxWidth, maxHeigh,  tx, ty, postfix);
         modified=false;
     } while(ch!='x');
-    cout << "EXECUTING THIS!!!" << endl;
-
-//    closegraph();
+    postfix.clear();
+    values.clear();
 
 }

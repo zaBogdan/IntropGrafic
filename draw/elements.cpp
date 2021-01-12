@@ -3,7 +3,6 @@
 //
 
 #include "elements.h"
-char input[100] = " \0";
 int i=0;
 
 bool inFocus(coord center,coord mouseInput,int textW, int textH)
@@ -61,6 +60,8 @@ void textInputBar(coord start, coord mouse, char ch)
     setcolor(WHITE);
     settextstyle(0,0,2);
 //    char ch = kbhit();
+    if(strlen(input)<i)
+        i=0;
     if(ch)
     {
         char ch = getch();
@@ -72,7 +73,8 @@ void textInputBar(coord start, coord mouse, char ch)
         }
         if(ch==13)
         {
-            activePage=4;
+            if(i)
+                needsModified=true;
             return;
         }
 

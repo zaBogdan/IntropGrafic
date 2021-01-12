@@ -7,8 +7,10 @@ int activePage=0;
 int isShiftUp=0;
 settings userSettings;
 vector<string> postfix;
+bool needsModified=false;
+char input[100]= " \0";
 
-int gameLoop(coord mouse, char key, vector<string> postfix)
+int gameLoop(coord mouse, char key)
 {
     //main page
     if(activePage==0)
@@ -31,7 +33,7 @@ int gameLoop(coord mouse, char key, vector<string> postfix)
     return 0;
 }
 
-void graphic(vector<string> postfix)
+void graphic()
 {
     initialSetup();
     loadSettings("default");
@@ -56,9 +58,27 @@ void graphic(vector<string> postfix)
         }
         //get keyboard input
         keyBoardInput=kbhit();
-
+        if(needsModified && activePage==1)
+        {
+            needsModified=false;
+            string func = readFunction(input);
+            postfix = buildAndValidatePostfix(func);
+            if(postfix.empty())
+            {
+                postfix.clear();
+                cout << "FAILED!\n";
+            }
+            else
+            {
+                cout << "[MAIN] The C/C++ notation of this function is: ";
+                cout << getCPPNotation(postfix) << endl;
+                activePage=4;
+                strcpy(input, " \0");
+                clearviewport();
+            }
+        }
         //we re-render only when necessary.
-        if(gameLoop(mouseInput, keyBoardInput, postfix)==-1)
+        if(gameLoop(mouseInput, keyBoardInput)==-1)
             break;
         //handle the settings
         if(userSettings.isModified)
@@ -101,4 +121,11 @@ void initialSetup()
 void exitGraphic()
 {
     closegraph();
+}
+string readFunction(char* input)
+{
+    string s;
+    for(int i=0;i<strlen(input);i++)
+        s+=input[i];
+    return s;
 }

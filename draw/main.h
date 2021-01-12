@@ -14,10 +14,13 @@ extern int activePage;
 extern settings userSettings;
 extern int isShiftUp;
 extern vector<string> postfix;
+extern bool needsModified;
+extern char input[100];
 
 
 void initialSetup();
-void graphic(vector<string> postfix);
+void graphic();
 void exitGraphic();
-int gameLoop(coord, char, vector <string> postfix);
+int gameLoop(coord, char);
 void mainMenuPage(coord);
+string readFunction(char*);

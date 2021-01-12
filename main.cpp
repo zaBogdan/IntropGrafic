@@ -28,14 +28,14 @@ double f(double x)
 }
 
 int main() {
-    string func = readFunction2();
-    postfix = buildAndValidatePostfix(func);
-    if(postfix.empty())
-        return 1;
-    cout << "[MAIN] The C/C++ notation of this function is: ";
-    cout << getCPPNotation(postfix) << endl;
+//    string func = readFunction2();
+//    postfix = buildAndValidatePostfix(func);
+//    if(postfix.empty())
+//        return 1;
+//    cout << "[MAIN] The C/C++ notation of this function is: ";
+//    cout << getCPPNotation(postfix) << endl;
 
-    graphic(postfix);
+    graphic();
     cout << "[MAIN] This was the end!";
     cout << endl;
     return 0;

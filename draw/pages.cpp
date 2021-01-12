@@ -49,7 +49,12 @@ void inputFunction(coord mouse, char key)
     textInputBar(coord{100,400}, mouse,key);
     char backButton[] = "Go";
     //back button
-    drawButton(500,500,mouse,backButton,4);
+    drawButton(500,500,mouse,backButton,10);
+    if(activePage==10)
+    {
+        needsModified=true;
+        activePage=1;
+    }
 }
 void drawPage(coord mouse, vector<string> postfix)
 {
@@ -59,7 +64,7 @@ void drawPage(coord mouse, vector<string> postfix)
     //setactivepage(4);
     //cleardevice();
     cleardevice();
-    drawGraph(postfix);
+    drawGraph();
     //line(100, 0, 100, 100);
     delay(1000);
     cleardevice();
