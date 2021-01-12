@@ -167,8 +167,8 @@ double getValueFromPostfix(vector<string> postfix, double x)
             double aval = atof(val.c_str());
             if(val[0]=='e' && val.length()==1)
                 aval = M_E;
-            if(val[0]=='p' && val[1]=='i' && val.length()==2)
-                aval = M_PI;
+            if(val.length()==1 && aval==0)
+                aval=1;
             s.push(aval);
         }
     }
