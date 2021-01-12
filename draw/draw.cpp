@@ -79,13 +79,18 @@ pair<double, double> drawaxes (int lgx, int lgy,  double &unitax, int &unitaxpx,
     interval.first = -(tr(lgx/2, tx) / unitaxpx * unitax + 1);
     interval.second = (lgx - tr(lgx/2, tx))/unitaxpx * unitax + 1;
 
-    if(userSettings.axis_arrows) {
-        line(tr(lgx / 2, tx), 0, tr(lgx / 2, tx), lgy);
-        line(0, tr(lgy / 2, ty), lgx, tr(lgy / 2, ty));
 
+
+    if(userSettings.minor_gridlines || userSettings.axis_arrows) {
 ///impartirea si notarea axelor
         for (int i = lgx / 2 + unitaxpx; tr(i, tx) <= lgx; i += unitaxpx) {
-            line(tr(i, tx), tr(lgy / 2 - 3, ty), tr(i, tx), tr(lgy / 2 + 3, ty));
+            if(userSettings.axis_arrows)
+                line(tr(i, tx), tr(lgy / 2 - 3, ty), tr(i, tx), tr(lgy / 2 + 3, ty));
+            if(userSettings.minor_gridlines) {
+                setcolor(COLOR(96, 69, 69));
+                line(tr(i, tx), 0, tr(i, tx), lgy);
+                setcolor(WHITE);
+            }
             if (userSettings.axis_numbers) {
                 nrsir(k, sir);
                 outtextxy(tr(i, tx), tr(lgy / 2 + 3, ty), sir);
@@ -97,7 +102,13 @@ pair<double, double> drawaxes (int lgx, int lgy,  double &unitax, int &unitaxpx,
 
         k = -unitax;
         for (int i = lgx / 2 - unitaxpx; tr(i, tx) >= 0; i -= unitaxpx) {
-            line(tr(i, tx), tr(lgy / 2 - 3, ty), tr(i, tx), tr(lgy / 2 + 3, ty));
+            if(userSettings.axis_arrows)
+                line(tr(i, tx), tr(lgy / 2 - 3, ty), tr(i, tx), tr(lgy / 2 + 3, ty));
+            if(userSettings.minor_gridlines) {
+                setcolor(COLOR(96, 69, 69));
+                line(tr(i, tx), 0, tr(i, tx), lgy);
+                setcolor(WHITE);
+            }
             if (userSettings.axis_numbers) {
                 nrsir(k, sir);
                 outtextxy(tr(i, tx), tr(lgy / 2 + 3, ty), sir);
@@ -109,7 +120,13 @@ pair<double, double> drawaxes (int lgx, int lgy,  double &unitax, int &unitaxpx,
 
         k = -unitax;
         for (int i = lgy / 2 + unitaxpx; tr(i, ty) <= lgy; i += unitaxpx) {
-            line(tr(lgx / 2 - 3, tx), tr(i, ty), tr(lgx / 2 + 3, tx), tr(i, ty));
+            if(userSettings.axis_arrows)
+                line(tr(lgx / 2 - 3, tx), tr(i, ty), tr(lgx / 2 + 3, tx), tr(i, ty));
+            if(userSettings.minor_gridlines) {
+                setcolor(COLOR(96, 69, 69));
+                line(0, tr(i, ty), lgx, tr(i, ty));
+                setcolor(WHITE);
+            }
             if (userSettings.axis_numbers) {
                 nrsir(k, sir);
                 outtextxy(tr(lgx / 2 + 3, tx), tr(i, ty), sir);
@@ -119,7 +136,13 @@ pair<double, double> drawaxes (int lgx, int lgy,  double &unitax, int &unitaxpx,
         }
         k = unitax;
         for (int i = lgy / 2 - unitaxpx; tr(i, ty) >= 0; i -= unitaxpx) {
-            line(tr(lgx / 2 - 3, tx), tr(i, ty), tr(lgx / 2 + 3, tx), tr(i, ty));
+            if(userSettings.axis_arrows)
+                line(tr(lgx / 2 - 3, tx), tr(i, ty), tr(lgx / 2 + 3, tx), tr(i, ty));
+            if(userSettings.minor_gridlines) {
+                setcolor(COLOR(96, 69, 69));
+                line(0, tr(i, ty), lgx, tr(i, ty));
+                setcolor(WHITE);
+            }
             if (userSettings.axis_numbers) {
                 nrsir(k, sir);
                 outtextxy(tr(lgx / 2 + 3, tx), tr(i, ty), sir);
@@ -128,6 +151,16 @@ pair<double, double> drawaxes (int lgx, int lgy,  double &unitax, int &unitaxpx,
             k += unitax;
         }
         if (userSettings.axis_numbers) outtextxy(tr(lgx / 2 + 3, tx), tr(lgy / 2 + 3, ty), "0");
+    }
+
+    if(userSettings.axis_arrows) {
+        line(tr(lgx / 2, tx), 0, tr(lgx / 2, tx), lgy);
+        line(tr(lgx / 2, tx) + 1, 0, tr(lgx / 2, tx) + 1, lgy);
+        line(tr(lgx / 2, tx) - 1, 0, tr(lgx / 2, tx) - 1, lgy);
+
+        line(0, tr(lgy / 2, ty), lgx, tr(lgy / 2, ty));
+        line(0, tr(lgy / 2, ty) + 1, lgx, tr(lgy / 2, ty) + 1);
+        line(0, tr(lgy / 2, ty) - 1, lgx, tr(lgy / 2, ty) - 1);
     }
 
     return interval;
@@ -160,12 +193,12 @@ void drawf (double &unitax, int &unitaxpx, int lgx, int lgy, int tx, int ty) {
     double y1 = lgy / 2 - (func(a,postfix) / unitax) * unitaxpx;
     double x2 = lgx / 2 + ((a + unitf) / unitax) * unitaxpx;
     double y2 = lgy / 2 - (func(a + unitf,postfix) / unitax) * unitaxpx;
-
+    setcolor(RED);
     outtextxy(20, 700, "Press x to go back");
     outtextxy(20, 710, "Press i to zoom in");
     outtextxy(20, 720, "Press o to zoom out");
     outtextxy(20, 730, "Move with w - up, a - left, s - down, d - right");
-
+    setcolor(WHITE);
 
     for (double j = a + 2 * unitf; j <= b; j += unitf) {
         double x3 = (j / unitax) * unitaxpx + lgx / 2;
@@ -187,6 +220,13 @@ void drawf (double &unitax, int &unitaxpx, int lgx, int lgy, int tx, int ty) {
         y2 = y3;
 
     }
+
+    setcolor(RED);
+    outtextxy(20, 700, "Press x to go back");
+    outtextxy(20, 710, "Press i to zoom in");
+    outtextxy(20, 720, "Press o to zoom out");
+    outtextxy(20, 730, "Move with w - up, a - left, s - down, d - right");
+    setcolor(WHITE);
 }
 void drawGraph()
 {
@@ -195,6 +235,8 @@ void drawGraph()
     double unitax = 1;
     int unitaxpx = 40;
     int tx = 0, ty = 0;
+
+    //settextstyle(10, 0, 0);
 
     drawf(unitax, unitaxpx, maxWidth, maxHeigh,  tx, ty);
     do
