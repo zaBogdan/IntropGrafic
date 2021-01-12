@@ -182,6 +182,7 @@ void settingsPage(coord mouse)
 
 void informationPage(coord mouse)
 {
+
     pageInit(3, "Information", mouse);
     outtextxy(10,300, "I will write this later.");
 

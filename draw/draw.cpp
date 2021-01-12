@@ -79,15 +79,7 @@ pair<double, double> drawaxes (int lgx, int lgy,  double &unitax, int &unitaxpx,
     interval.first = -(tr(lgx/2, tx) / unitaxpx * unitax + 1);
     interval.second = (lgx - tr(lgx/2, tx))/unitaxpx * unitax + 1;
 
-    if(userSettings.axis_arrows) {
-        line(tr(lgx / 2, tx), 0, tr(lgx / 2, tx), lgy);
-        line(tr(lgx / 2, tx) + 1, 0, tr(lgx / 2, tx) + 1, lgy);
-        line(tr(lgx / 2, tx) - 1, 0, tr(lgx / 2, tx) - 1, lgy);
 
-        line(0, tr(lgy / 2, ty), lgx, tr(lgy / 2, ty));
-        line(0, tr(lgy / 2, ty) + 1, lgx, tr(lgy / 2, ty) + 1);
-        line(0, tr(lgy / 2, ty) - 1, lgx, tr(lgy / 2, ty) - 1);
-    }
 
     if(userSettings.minor_gridlines || userSettings.axis_arrows) {
 ///impartirea si notarea axelor
@@ -159,6 +151,16 @@ pair<double, double> drawaxes (int lgx, int lgy,  double &unitax, int &unitaxpx,
             k += unitax;
         }
         if (userSettings.axis_numbers) outtextxy(tr(lgx / 2 + 3, tx), tr(lgy / 2 + 3, ty), "0");
+    }
+
+    if(userSettings.axis_arrows) {
+        line(tr(lgx / 2, tx), 0, tr(lgx / 2, tx), lgy);
+        line(tr(lgx / 2, tx) + 1, 0, tr(lgx / 2, tx) + 1, lgy);
+        line(tr(lgx / 2, tx) - 1, 0, tr(lgx / 2, tx) - 1, lgy);
+
+        line(0, tr(lgy / 2, ty), lgx, tr(lgy / 2, ty));
+        line(0, tr(lgy / 2, ty) + 1, lgx, tr(lgy / 2, ty) + 1);
+        line(0, tr(lgy / 2, ty) - 1, lgx, tr(lgy / 2, ty) - 1);
     }
 
     return interval;
