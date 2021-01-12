@@ -56,13 +56,11 @@ void inputFunction(coord mouse, char key)
         activePage=1;
     }
 }
-void drawPage(coord mouse, vector<string> postfix)
+void drawPage(coord mouse)
 {
     char pageName[100] = "Draw";
     pageInit(5, pageName, mouse);
-    //setactivepage(1);
-    //setactivepage(4);
-    //cleardevice();
+    cout << getactivepage() << endl;
     cleardevice();
     drawGraph();
     //line(100, 0, 100, 100);

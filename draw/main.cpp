@@ -25,7 +25,7 @@ int gameLoop(coord mouse, char key)
     if(activePage==1)
         inputFunction(mouse, key);
     if(activePage==4)
-        drawPage(mouse, postfix);
+        drawPage(mouse);
 
     //handle the exit logic
     if(activePage==-1)
@@ -36,7 +36,9 @@ int gameLoop(coord mouse, char key)
 void graphic()
 {
     initialSetup();
-    loadSettings("default");
+    loadSettings("config-1");
+    if(!userSettings.initialized)
+        loadSettings("default");
 
     if(!userSettings.initialized)
     {
@@ -87,8 +89,11 @@ void graphic()
             if(lang!=userSettings.language)
             {
                 cout << "[Settings] Changing the language!\n";
-                for(int i=0;i<=5;i++)
+                for(int i=0;i<6;i++)
                 {
+                    //5th is valid but 4 isn't.
+                    if(i==4)
+                        continue;
                     setactivepage(i);
                     clearviewport();
                     setvisualpage(i);
@@ -104,6 +109,7 @@ void graphic()
             }
             userSettings.isModified = false;
         }
+
         setvisualpage(activePage);
         delay(1000/frames);
     }
@@ -112,7 +118,7 @@ void graphic()
 void initialSetup()
 {
     /* select driver and mode that supports multiple pages */
-    int gdriver = EGA, gmode = EGAHI, errorcode;
+    int gdriver = EGA, gmode = EGAHI;
     char t[] = "test";
     initgraph(&gdriver,&gmode, t);
     cleardevice();

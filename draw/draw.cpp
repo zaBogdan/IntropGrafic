@@ -4,8 +4,6 @@
 #include "draw.h"
 #include "main.h"
 #include "pages.h"
-bool modified=false;
-
 
 void nrsir (double n, char s[])
 {
@@ -142,7 +140,7 @@ double func(double n, vector<string> postfix)
 }
 
 ///Deseneaza functie pe intervalul [a, b] intr-o fereastra de dimensiuni lgx, lgy
-void drawf (double &unitax, int &unitaxpx, int lgx, int lgy, int tx, int ty,vector<string> postfix) {
+void drawf (double &unitax, int &unitaxpx, int lgx, int lgy, int tx, int ty) {
 
     clearviewport();
     pair<double, double> aux = drawaxes(lgx, lgy, unitax, unitaxpx, tx, ty);
@@ -191,7 +189,7 @@ void drawGraph()
     int unitaxpx = 40;
     int tx = 0, ty = 0;
 
-    drawf(unitax, unitaxpx, maxWidth, maxHeigh,  tx, ty, postfix);
+    drawf(unitax, unitaxpx, maxWidth, maxHeigh,  tx, ty);
     do
     {
         ch=getch();
@@ -201,11 +199,9 @@ void drawGraph()
         {
             case 'i':
                 unitaxpx += 5;
-                modified=true;
                 break;
             case 'o':
                 unitaxpx -= 5;
-                modified=true;
                 break;
             case 'w':
                 ty=ty-30;
@@ -219,9 +215,10 @@ void drawGraph()
             case 'd':
                 tx=tx+30;
                 break;
+            default:
+                continue;
         }
-        drawf(unitax, unitaxpx, maxWidth, maxHeigh,  tx, ty, postfix);
-        modified=false;
+        drawf(unitax, unitaxpx, maxWidth, maxHeigh,  tx, ty);
     } while(ch!='x');
     postfix.clear();
     values.clear();
