@@ -1935,6 +1935,8 @@ int bgi_getch (void)
             key != KEY_MENU &&
             key != KEY_ALT_GR) // can't catch AltGr!
             return (int) key;
+        if(SDL_KEYDOWN==type && (key == KEY_LEFT_SHIFT  || key == KEY_RIGHT_SHIFT))
+            return 15;
     } while (1);
 
     // we should never get here...

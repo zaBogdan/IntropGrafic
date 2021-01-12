@@ -158,8 +158,12 @@ double getValueFromPostfix(vector<string> postfix, double x)
                 s.pop();
                 double left = s.top();
                 s.pop();
-                s.push(funcs2[val](left,right));
-
+                if(val=="^" && left==M_E)
+                    s.push(funcs["exp"](right));
+                if(val=="^" && left==M_E && right<0)
+                    s.push(funcs["expm1"](right));
+                else
+                    s.push(funcs2[val](left,right));
             }
         }
         else

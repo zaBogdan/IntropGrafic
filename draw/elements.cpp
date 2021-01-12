@@ -50,27 +50,49 @@ void drawButton(int x, int y,coord mouseInput, char text[20],int aPage,int font_
     settextstyle(0,0, 0);
 }
 
-void textInputBar(coord start, coord mouse, char ch)
+void textInputBar(coord start, coord mouse, char key)
 {
-//    char warning[] = "Warning! You are in input mode! To leave please press `esc` or if you want to finish press `enter`.";
-//    char explain[] = "Being in input mode means that you can't do anything else!";
-//    outtextxy(start.x+30,start.y-50, warning);
-//    outtextxy(start.x+30,start.y-30, explain);
-    rectangle(start.x, start.y, start.x+600, start.y+50);
+    int trasholdX=400;
+    int trasholdY=30;
+    char explain[] = "To enter in `INPUT` mode please click on the rectangle!";
+
+    rectangle(start.x-trasholdX, start.y-trasholdY,start.x+trasholdX,start.y+trasholdY);
+    if(inFocus(start,mouse,800,60) && (ismouseclick(WM_LBUTTONDOWN) || ismouseclick(WM_RBUTTONDOWN)))
+    {
+        setfillstyle(XHATCH_FILL, BLACK);
+        bar(start.x-textwidth(explain)/2-20,start.y-70,start.x+textwidth(explain)/2+20, start.y-45);
+        setcolor(WHITE);
+        char warning[] = "Warning! You are in input mode! To leave please press `esc` or if you want to finish press `enter`.";
+        char explain[] = "Being in input mode means that you can't do anything else!";
+        outtextxy(start.x-textwidth(warning)/2,start.y-70, warning);
+        outtextxy(start.x-textwidth(explain)/2,start.y-60, explain);
+    }
+    else
+    {
+        outtextxy(start.x-textwidth(explain)/2,start.y-60, explain);
+        return;
+    }
+
+
     setcolor(WHITE);
     settextstyle(0,0,2);
-//    char ch = kbhit();
+
     if(strlen(input)<i)
         i=0;
-    if(ch)
+
+    char ch='0';
+    while((int)ch!=27)
     {
-        char ch = getch();
-        cout << (int)ch << endl;
-        if (ch == -31 || ch == -27)
+         ch = getch();
+        cout << (int)ch << ' ' << ch << endl;
+        if((int)ch==27)
         {
-            cout << "Char: " << ch << " int: " << (int)ch << endl;
-            ch = 15;
+            clearviewport();
+            outtextxy(start.x-trasholdX+10, start.y, input);
+            break;
         }
+        if (ch == -31 || ch == -27)
+            ch = 15;
         if(ch==13)
         {
             if(i)
@@ -84,7 +106,8 @@ void textInputBar(coord start, coord mouse, char ch)
         if(ch==8)
         {
             input[--i]='\0';
-            clearviewport();
+            setfillstyle(XHATCH_FILL, BLACK);
+            bar(start.x-trasholdX+10, start.y-20, start.x+trasholdX-10,start.y+20);
         }
         //ordinary chars check
         else if(ch!=15)
@@ -119,6 +142,7 @@ void textInputBar(coord start, coord mouse, char ch)
         }
         cout << "Shift is now: " << isShiftUp << endl;
         cout << "[INPUT] Your string is: "<< input << endl;
-        outtextxy(start.x+10, start.y+20, input);
+        outtextxy(start.x-trasholdX+10, start.y, input);
     }
+    cout << "ESCAPED!";
 }

@@ -46,10 +46,10 @@ void inputFunction(coord mouse, char key)
     pageInit(1, pageName, mouse);
     setvisualpage(1);
     //input this and then compute the postfix version and print the c++ header
-    textInputBar(coord{100,400}, mouse,key);
+    textInputBar(coord{maxWidth/2,400}, mouse,key);
     char backButton[] = "Go";
     //back button
-    drawButton(500,500,mouse,backButton,10);
+    drawButton(maxWidth/2,500,mouse,backButton,10);
     if(activePage==10)
     {
         needsModified=true;
@@ -60,14 +60,14 @@ void drawPage(coord mouse)
 {
     char pageName[100] = "Draw";
     pageInit(5, pageName, mouse);
-    cout << getactivepage() << endl;
+//    cout << getactivepage() << endl;
     cleardevice();
     drawGraph();
     //line(100, 0, 100, 100);
     delay(1000);
     cleardevice();
 
-    activePage=0;
+    activePage=1;
 }
 
 void settingsPage(coord mouse)
