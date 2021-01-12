@@ -134,8 +134,15 @@ pair<double, double> drawaxes (int lgx, int lgy,  double &unitax, int &unitaxpx,
 
 }
 
+
 double func(double n, vector<string> postfix)
 {
+    if(userSettings.measure=="degrees")
+    {
+        n = n*(180.0/M_PI);
+
+        cout << "IN grade: " << n << endl;
+    }
     return getValueFromPostfix(postfix,n);
 }
 
