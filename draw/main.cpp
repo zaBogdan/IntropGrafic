@@ -8,7 +8,7 @@ int isShiftUp=0;
 settings userSettings;
 vector<string> postfix;
 
-int gameLoop(coord mouse, char key)
+int gameLoop(coord mouse, char key, vector<string> postfix)
 {
     //main page
     if(activePage==0)
@@ -23,14 +23,15 @@ int gameLoop(coord mouse, char key)
     if(activePage==1)
         inputFunction(mouse, key);
     if(activePage==4)
-        drawGraph(postfix);
+        drawPage(mouse, postfix);
+
     //handle the exit logic
     if(activePage==-1)
         return -1;
     return 0;
 }
 
-void graphic()
+void graphic(vector<string> postfix)
 {
     initialSetup();
     loadSettings("default");
@@ -57,7 +58,7 @@ void graphic()
         keyBoardInput=kbhit();
 
         //we re-render only when necessary.
-        if(gameLoop(mouseInput, keyBoardInput)==-1)
+        if(gameLoop(mouseInput, keyBoardInput, postfix)==-1)
             break;
         //handle the settings
         if(userSettings.isModified)
@@ -66,7 +67,7 @@ void graphic()
             if(lang!=userSettings.language)
             {
                 cout << "[Settings] Changing the language!\n";
-                for(int i=0;i<4;i++)
+                for(int i=0;i<=5;i++)
                 {
                     setactivepage(i);
                     clearviewport();

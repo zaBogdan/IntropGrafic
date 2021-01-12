@@ -63,12 +63,19 @@ void textInputBar(coord start, coord mouse, char ch)
 //    char ch = kbhit();
     if(ch)
     {
-//        char ch = getch();
-        cout << "Char: " << ch << " int: " << (int)ch << endl;
-        if(ch==-31)
-            ch=15;
+        char ch = getch();
+        cout << (int)ch << endl;
+        if (ch == -31 || ch == -27)
+        {
+            cout << "Char: " << ch << " int: " << (int)ch << endl;
+            ch = 15;
+        }
         if(ch==13)
+        {
+            activePage=4;
             return;
+        }
+
         if(i>maxLength)
             return;
         //backspace check

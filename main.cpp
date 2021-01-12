@@ -34,8 +34,8 @@ int main() {
         return 1;
     cout << "[MAIN] The C/C++ notation of this function is: ";
     cout << getCPPNotation(postfix) << endl;
-//    graphic();
-    drawGraph(postfix);
+
+    graphic(postfix);
     cout << "[MAIN] This was the end!";
     cout << endl;
     return 0;
