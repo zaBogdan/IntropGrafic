@@ -29,4 +29,5 @@ warning_input = "Atentie! Esti in modul `INPUT`! Pentru a reveni in modul normal
 explain_input = "Modul `INPUT` inseamna ca nu poti folosi cursorul!";
 input_title = "Scrie o functie"
 draw_function = "Deseneaza!"
+error_postfix = "Functia introdusa nu este valida!"
 information_title = "Informatii despre proiect"

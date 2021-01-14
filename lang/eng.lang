@@ -29,5 +29,6 @@ warning_input = "Warning! You are in input mode! To leave please press `esc` or 
 explain_input = "Being in input mode means that you can't do anything else!";
 input_title = "Input a function"
 draw_function = "Draw!"
+error_postfix = "This function is not valid!"
 information_title = "Project information"
 information_project_about = "In this project we were supposed to draw the graph of any given function. In order to achieve the end goal we had to split the project into two parts: graphics and function evaluator. For the function evaluator we’ve actually transform the string into postfix notation in order to remove al parentheses and have a clear path about the priority of our operators. Once we had the postfix notation we’ve just build an evaluator that was reconstructing the whole thing and outputting a value. For the graphics part we’ve used a port for Graphics.h using SDL, so it is also cross-platform. We’ve tried as much as possible to make it 100% live update, but we failed to this while drawing the graph."

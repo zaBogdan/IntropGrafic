@@ -55,8 +55,11 @@ void textInputBar(coord start, coord mouse, char key)
 {
     int trasholdX=400;
     int trasholdY=30;
+    settextstyle(0,0,2);
+    if(strlen(input))
+        outtextxy(start.x-trasholdX+10, start.y, input);
+    settextstyle(0,0,0);
     char enter_input[100], warning_input[100],explain_input[100];
-
     strcpy(enter_input, language["enter_input"].c_str());
     strcpy(warning_input, language["warning_input"].c_str());
     strcpy(explain_input, language["explain_input"].c_str());
@@ -79,7 +82,6 @@ void textInputBar(coord start, coord mouse, char key)
 
     setcolor(WHITE);
     settextstyle(0,0,2);
-
     if(strlen(input)<i)
         i=0;
 

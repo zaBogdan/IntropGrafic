@@ -69,7 +69,11 @@ void graphic()
             if(postfix.empty())
             {
                 postfix.clear();
-                cout << "FAILED!\n";
+                char error_postfix[100];
+                strcpy(error_postfix, language["error_postfix"].c_str());
+                clearviewport();
+                outtextxy(maxWidth/2-textwidth(error_postfix)/2, 450,error_postfix);
+                activePage=1;
             }
             else
             {
