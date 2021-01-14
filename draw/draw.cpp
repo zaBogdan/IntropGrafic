@@ -59,6 +59,14 @@ double tr(int coord, int translare)
     return coord+translare;
 }
 
+bool canZoomOut(int lgx, int lgy, double &unitax, int &unitaxpx, int tx, int ty){
+    pair<double, double> interval;
+    interval.first =  (tr(lgx/2, tx) / unitaxpx * unitax + 1);
+    interval.second = (lgx - tr(lgx/2, tx))/unitaxpx * unitax + 1;
+
+    return (interval.second + interval.first) < 80;
+}
+
 pair<double, double> drawaxes (int lgx, int lgy,  double &unitax, int &unitaxpx, int tx, int ty)
 {
     char sir[1000] = {};
@@ -150,7 +158,9 @@ pair<double, double> drawaxes (int lgx, int lgy,  double &unitax, int &unitaxpx,
             }
             k += unitax;
         }
-        if (userSettings.axis_numbers) outtextxy(tr(lgx / 2 + 3, tx), tr(lgy / 2 + 3, ty), "0");
+        strcpy(sir, "0");
+        sir[1] = 0;
+        if (userSettings.axis_numbers) outtextxy(tr(lgx / 2 + 3, tx), tr(lgy / 2 + 3, ty), sir);
     }
 
     if(userSettings.axis_arrows) {
@@ -175,6 +185,12 @@ double func(double n, double start,double finish)
     return getValueFromPostfix(postfix,n,start, finish);
 }
 
+enum{
+    CONSTANT,
+    RISING,
+    FALLING
+};
+
 ///Deseneaza functie pe intervalul [a, b] intr-o fereastra de dimensiuni lgx, lgy
 void drawf (double &unitax, int &unitaxpx, int lgx, int lgy, int tx, int ty) {
     char go_back[100],zoom_in[100],zoom_out[100],controls[100];
@@ -188,33 +204,84 @@ void drawf (double &unitax, int &unitaxpx, int lgx, int lgy, int tx, int ty) {
     int a = (int)aux.first;
     int b = (int)aux.second;
 
+    int state;
 
     ///desenarea graficului
-    double x1 = lgx / 2 + (a / unitax) * unitaxpx;
-    double y1 = lgy / 2 - (func(a,a,b) / unitax) * unitaxpx;
-    double x2 = lgx / 2 + ((a + unitf) / unitax) * unitaxpx;
-    double y2 = lgy / 2 - (func(a + unitf,a,b) / unitax) * unitaxpx;
+    double x1 = (double)lgx / 2 + (a / (double)unitax) * (double)unitaxpx;
+    double y1 = (double)lgy / 2 - (func(a,a,b) / (double)unitax) * (double)unitaxpx;
+    double x2 = (double)lgx / 2 + ((a + unitf) / (double)unitax) * (double)unitaxpx;
+    double y2 = (double)lgy / 2 - (func(a + unitf,a,b) / (double)unitax) * (double)unitaxpx;
+
+    //double dif1 = (y2-y1)/(x2-x1);
+
     setcolor(WHITE);
 
+    if(y1 < y2) {
+        state = FALLING;
+    }
+
+    else if(y1 > y2){
+        state = RISING;
+    }
+
+    else{
+        state = CONSTANT;
+    }
+
+    x1 = x2;
+    y1 = y2;
+
+
+
+//    double tmp = func(0,a,b) * 2;
+//    cout << tmp << '\n';
+    //return;
+
     for (double j = a + 2 * unitf; j <= b; j += unitf) {
-        double x3 = (j / unitax) * unitaxpx + lgx / 2;
-        double y3 = lgy / 2 - (func(j,a,b) / unitax) * unitaxpx;
+        x2 = (j / (double)unitax) * (double)unitaxpx + (double)lgx / 2;
+        y2 = (double)lgy / 2 - (func(j,a,b) / (double)unitax) * (double)unitaxpx;
 
-        if (!((y1 > lgy && y2 < 0) || (y2 > lgy && y1 < 0))) {
-            line(tr(x1, tx), tr(y1, ty),
-                 tr(x2, tx), tr(y2, ty));
+        if(state == RISING){
+            if(y1 < y2){
+                if(abs(y1 - y2) > lgy/2){
+                    if(tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) line(tr(x1, tx), tr(y1, ty), tr(x1, tx), 0);
+                    if(tr(y2, ty) >= 0 && tr(y2, ty) <= lgy) line(tr(x2, tx), tr(y2, ty), tr(x2, tx), lgy);
+                }
 
-            if (y2 < y1 && y2 < y3)
-                circle(tr(x2, tx), tr(y2, ty), 5);
-            if (y2 > y1 && y2 > y3)
-                circle(tr(x2, tx), tr(y2, ty), 5);
+                else{
+                    state = FALLING;
+                    if(tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) circle(tr(x1, tx), tr(y1, ty), 5);
+                    if((tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) || (tr(y2, ty) >= 0 && tr(y2, ty) <= lgy)) line(tr(x1, tx), tr(y1, ty), tr(x2, tx), tr(y2, ty));
+                }
+            }
+
+            else{
+                if((tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) || (tr(y2, ty) >= 0 && tr(y2, ty) <= lgy)) line(tr(x1, tx), tr(y1, ty), tr(x2, tx), tr(y2, ty));
+            }
+        }
+
+        if(state == FALLING){
+            if(y1 > y2){
+                if(abs(y1- y2) > lgy/2){
+                    if(tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) line(tr(x1, tx), tr(y1, ty), tr(x1, tx), lgy);
+                    if(tr(y2, ty) >= 0 && tr(y2, ty) <= lgy) line(tr(x2, tx), tr(y2, ty), tr(x2, tx), 0);
+                }
+
+                else{
+                    state = RISING;
+                    if(tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) circle(tr(x1, tx), tr(y1, ty), 5);
+                    if((tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) || (tr(y2, ty) >= 0 && tr(y2, ty) <= lgy)) line(tr(x1, tx), tr(y1, ty), tr(x2, tx), tr(y2, ty));
+                }
+            }
+
+            else{
+                if((tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) || (tr(y2, ty) >= 0 && tr(y2, ty) <= lgy)) line(tr(x1, tx), tr(y1, ty), tr(x2, tx), tr(y2, ty));
+            }
         }
 
         x1 = x2;
         y1 = y2;
-        x2 = x3;
-        y2 = y3;
-
+        //dif = abs(y1 - y2);
     }
     setcolor(COLOR(104, 137, 255));
     char func[100]="f(x)=";
@@ -240,6 +307,7 @@ void drawGraph()
     drawf(unitax, unitaxpx, maxWidth, maxHeigh,  tx, ty);
     do
     {
+        bool redraw = true;
         ch=getch();
         if(ch=='x')
             break;
@@ -249,7 +317,8 @@ void drawGraph()
                 unitaxpx += 5;
                 break;
             case 'o':
-                unitaxpx -= 5;
+                if(canZoomOut(maxWidth, maxHeigh, unitax, unitaxpx, tx, ty)) unitaxpx -= 5;
+                else redraw = false;
                 break;
             case 'w':
                 ty=ty-30;
@@ -266,7 +335,7 @@ void drawGraph()
             default:
                 continue;
         }
-        drawf(unitax, unitaxpx, maxWidth, maxHeigh,  tx, ty);
+        if(redraw) drawf(unitax, unitaxpx, maxWidth, maxHeigh,  tx, ty);
     } while(ch!='x');
     postfix.clear();
     values.clear();
