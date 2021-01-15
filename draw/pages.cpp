@@ -188,7 +188,7 @@ void informationPage(coord mouse)
     char information_project_about[1400];
     char first[300]="In this project we were supposed to draw the graph of any given function. In order to achieve the end goal we had";
     char second[300]="to split the project into two parts: graphics and function evaluator. For the function evaluator we have actually";//
-    char third[300]="transform the string into postfix notation in order to remove al parentheses and have a clear path about the priority";//
+    char third[300]="transform the string into postfix notation in order to remove all parentheses and have a clear path about the priority";//
     char forth[300]="of our operators. Once we had the postfix notation we have just build an evaluator that was reconstructing the whole";
     char fifth[300]="thing and outputting a value. For the graphics part we have used a port for Graphics.h using SDL, so it is also";
     char sixth[300]="cross-platform. We have tried as much as possible to make it 100% live update, but we failed to this while drawing";

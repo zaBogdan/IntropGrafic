@@ -59,7 +59,8 @@ double tr(int coord, int translare)
     return coord+translare;
 }
 
-bool canZoomOut(int lgx, int lgy, double &unitax, int &unitaxpx, int tx, int ty){
+bool canZoomOut(int lgx, int lgy, double &unitax, int &unitaxpx, int tx, int ty)
+{
     pair<double, double> interval;
     interval.first =  (tr(lgx/2, tx) / unitaxpx * unitax + 1);
     interval.second = (lgx - tr(lgx/2, tx))/unitaxpx * unitax + 1;
@@ -204,32 +205,37 @@ void drawf (double &unitax, int &unitaxpx, int lgx, int lgy, int tx, int ty) {
     int a = (int)aux.first;
     int b = (int)aux.second;
 
-    int state;
-
+    int state = CONSTANT;
+    bool tmp = 1;
     ///desenarea graficului
     double x1 = (double)lgx / 2 + (a / (double)unitax) * (double)unitaxpx;
     double y1 = (double)lgy / 2 - (func(a,a,b) / (double)unitax) * (double)unitaxpx;
+    if(errorFlagDrawing != 0){
+        y1 = (double)1/0;
+        tmp = 0;
+    }
     double x2 = (double)lgx / 2 + ((a + unitf) / (double)unitax) * (double)unitaxpx;
     double y2 = (double)lgy / 2 - (func(a + unitf,a,b) / (double)unitax) * (double)unitaxpx;
+    if(errorFlagDrawing != 0){
+        y1 = (double)1/0;
+        tmp = 0;
+    }
 
     //double dif1 = (y2-y1)/(x2-x1);
 
     setcolor(WHITE);
+    if(tmp) {
+        if (y1 < y2) {
+            state = FALLING;
+        } else if (y1 > y2) {
+            state = RISING;
+        } else {
+            state = CONSTANT;
+        }
 
-    if(y1 < y2) {
-        state = FALLING;
+        x1 = x2;
+        y1 = y2;
     }
-
-    else if(y1 > y2){
-        state = RISING;
-    }
-
-    else{
-        state = CONSTANT;
-    }
-
-    x1 = x2;
-    y1 = y2;
 
 
 
@@ -238,12 +244,29 @@ void drawf (double &unitax, int &unitaxpx, int lgx, int lgy, int tx, int ty) {
     //return;
 
     for (double j = a + 2 * unitf; j <= b; j += unitf) {
-        x2 = (j / (double)unitax) * (double)unitaxpx + (double)lgx / 2;
-        y2 = (double)lgy / 2 - (func(j,a,b) / (double)unitax) * (double)unitaxpx;
+
+        if(y1 == (double)1/0){
+            x1 = (j / (double)unitax) * (double)unitaxpx + (double)lgx / 2;
+            y1 = (double)lgy / 2 - (func(j,a,b) / (double)unitax) * (double)unitaxpx;
+
+            if(errorFlagDrawing != 0){
+                y1 = (double)1/0;
+            }
+            continue;
+        }
+
+        else {
+            x2 = (j / (double) unitax) * (double) unitaxpx + (double) lgx / 2;
+            y2 = (double) lgy / 2 - (func(j, a, b) / (double) unitax) * (double) unitaxpx;
+        }
+
+        if(errorFlagDrawing != 0){
+            continue;
+        }
 
         if(state == RISING){
             if(y1 < y2){
-                if(abs(y1 - y2) > lgy/2){
+                if(abs( y1 - y2) > lgy/2){
                     if(tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) line(tr(x1, tx), tr(y1, ty), tr(x1, tx), 0);
                     if(tr(y2, ty) >= 0 && tr(y2, ty) <= lgy) line(tr(x2, tx), tr(y2, ty), tr(x2, tx), lgy);
                 }
@@ -272,6 +295,22 @@ void drawf (double &unitax, int &unitaxpx, int lgx, int lgy, int tx, int ty) {
                     if(tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) circle(tr(x1, tx), tr(y1, ty), 5);
                     if((tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) || (tr(y2, ty) >= 0 && tr(y2, ty) <= lgy)) line(tr(x1, tx), tr(y1, ty), tr(x2, tx), tr(y2, ty));
                 }
+            }
+
+            else{
+                if((tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) || (tr(y2, ty) >= 0 && tr(y2, ty) <= lgy)) line(tr(x1, tx), tr(y1, ty), tr(x2, tx), tr(y2, ty));
+            }
+        }
+
+        if(state == CONSTANT){
+            if(y1 > y2){
+                state = RISING;
+                if((tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) || (tr(y2, ty) >= 0 && tr(y2, ty) <= lgy)) line(tr(x1, tx), tr(y1, ty), tr(x2, tx), tr(y2, ty));
+            }
+
+            else if(y1 < y2){
+                state = FALLING;
+                if((tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) || (tr(y2, ty) >= 0 && tr(y2, ty) <= lgy)) line(tr(x1, tx), tr(y1, ty), tr(x2, tx), tr(y2, ty));
             }
 
             else{
