@@ -4,17 +4,16 @@
 
 #include "pages.h"
 
+
 void mainMenuPage(coord mouse)
 {
-    setactivepage(0);
-    char title[100] = "Grafic";
-    char projectSubtitle[100] = "We are the new Desmos";
     char imagePath[100] = "../assets/logo.bmp";
-    char draw[100] = "Draw";
-    char set[100] = "Settings";
-    char inf[100] = "Information";
-    char quit[100] = "Quit";
-    char buildVersion[100] = "Debug build 0.5";
+
+    setactivepage(0);
+
+    char title[100],projectSubtitle[100],draw[100];
+    char set[100],inf[100],quit[100],buildVersion[100];
+
     strcpy(projectSubtitle, language["projectSubtitle"].c_str());
     strcpy(draw, language["draw"].c_str());
     strcpy(set, language["settings"].c_str());
@@ -40,33 +39,41 @@ void mainMenuPage(coord mouse)
     settextstyle(0,0,0);
     outtextxy(maxWidth-textwidth(buildVersion)-30,maxHeigh-30, buildVersion);
 }
-void inputFunction(coord mouse)
+void inputFunction(coord mouse, char key)
 {
-    char pageName[100] = "Input function";
+    char pageName[100], draw_function[100];
+    strcpy(pageName, language["input_title"].c_str());
+    strcpy(draw_function, language["draw_function"].c_str());
 
     pageInit(1, pageName, mouse);
     setvisualpage(1);
     //input this and then compute the postfix version and print the c++ header
-    textInputBar(coord{100,400}, mouse);
+    textInputBar(coord{maxWidth/2,400}, mouse,key);
+    //back button
+    drawButton(maxWidth/2,500,mouse,draw_function,10);
+    if(activePage==10)
+    {
+        needsModified=true;
+        activePage=1;
+    }
+}
+void drawPage(coord mouse)
+{
+    char pageName[100] = "Draw";
+    pageInit(5, pageName, mouse);
+    cleardevice();
+    drawGraph();
+    delay(1000);
+    cleardevice();
+    activePage=1;
 }
 
 void settingsPage(coord mouse)
 {
-    char pageName[100] = "Settings";
-    char lang[100] = "Your lange is: ";
-    char axis_arrows[100] = "Arrows to axis: ";
-    char axis_numbers[100] = "Add numers to axis: ";
-    char minor_gridlines[100] = "Minor gridlines: ";
-    char measure[100] = "Measure in: ";
-    char english[100] = "English";
-    char romanian[100] = "Romanian";
-    char yes[100] = "Yes";
-    char no[100] = "No";
-    char radians[100] = "Radians";
-    char degrees[100] = "Degrees";
-    char save[100] = "Save";
-    char failedToSave[100] = "There was an error while trying to save the configuration! Please try again!";
-    char savedSuccessfull[100] = "Your settings have been saved successfully!";
+    char pageName[100],lang[100],axis_arrows[100],axis_numbers[100];
+    char minor_gridlines[100],measure[100],english[100],romanian[100];
+    char yes[100],no[100],radians[100],degrees[100],save[100];
+    char failedToSave[100],savedSuccessfull[100];
 
     strcpy(pageName, language["settingsPage"].c_str());
     pageInit(2, pageName, mouse);
@@ -153,7 +160,8 @@ void settingsPage(coord mouse)
             userSettings.measure="degrees";
             break;
         case 20:
-            cout << "[Pages] Saving the configuration\n";
+            if(DEBUG==true)
+                cout << "[Pages] Saving the configuration\n";
             settextstyle(0,0,1);
             if(!saveConfiguration("config-1"))
                 outtextxy(maxWidth/2-textwidth(failedToSave)/2, 200, failedToSave);
@@ -173,8 +181,28 @@ void settingsPage(coord mouse)
 
 void informationPage(coord mouse)
 {
-    pageInit(3, "Information", mouse);
-    outtextxy(10,300, "I will write this later.");
+
+    char information_title[100];
+    strcpy(information_title, language["information_title"].c_str());
+    pageInit(3, information_title, mouse);
+    char information_project_about[1400];
+    char first[300]="In this project we were supposed to draw the graph of any given function. In order to achieve the end goal we had";
+    char second[300]="to split the project into two parts: graphics and function evaluator. For the function evaluator we have actually";//
+    char third[300]="transform the string into postfix notation in order to remove al parentheses and have a clear path about the priority";//
+    char forth[300]="of our operators. Once we had the postfix notation we have just build an evaluator that was reconstructing the whole";
+    char fifth[300]="thing and outputting a value. For the graphics part we have used a port for Graphics.h using SDL, so it is also";
+    char sixth[300]="cross-platform. We have tried as much as possible to make it 100% live update, but we failed to this while drawing";
+    char seven[300]="the graph.";
+    outtextxy(60,300,first);
+    outtextxy(20,320,second);
+    outtextxy(20,340,third);
+    outtextxy(20,360,forth);
+    outtextxy(20,380,fifth);
+    outtextxy(20,400,sixth);
+    outtextxy(20,420,seven);
+
+    //TBD
+//    drawHugeText(coord{10,300}, language["information_project_about"].c_str());
 
 }
 

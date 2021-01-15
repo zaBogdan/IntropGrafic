@@ -35,7 +35,11 @@ vector<string> tokenizeFunction(string function)
                 cout << '\n';
         }
         else
+        {
+            cout << "Failed at: " << i << endl;
             return vector<string>();
+        }
+
         i++;
     }
     return applyTokenRules(tokens);

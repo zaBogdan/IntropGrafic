@@ -5,6 +5,7 @@
 #include <stack>
 #include <cstring>
 #include <map>
+#include <unordered_map>
 #define SDL_MAIN_HANDLED
 #define DEBUG false
 #include <graphics.h>

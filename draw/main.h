@@ -12,9 +12,16 @@ const int maxHeigh = 768;
 const int frames=80;
 extern int activePage;
 extern settings userSettings;
+extern int isShiftUp;
+extern vector<string> postfix;
+extern bool needsModified;
+extern char input[100];
+extern string cppVersion;
+
 
 void initialSetup();
 void graphic();
 void exitGraphic();
 int gameLoop(coord, char);
 void mainMenuPage(coord);
+string readFunction(char*);

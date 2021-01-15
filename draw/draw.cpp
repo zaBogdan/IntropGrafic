@@ -2,6 +2,8 @@
 // Created by Ilinca on 12/13/2020.
 //
 #include "draw.h"
+#include "main.h"
+#include "pages.h"
 
 void nrsir (double n, char s[])
 {
@@ -57,10 +59,19 @@ double tr(int coord, int translare)
     return coord+translare;
 }
 
-void drawaxes (int a, int b, int lgx, int lgy,  double &unitax, int &unitaxpx, int tx, int ty)
+bool canZoomOut(int lgx, int lgy, double &unitax, int &unitaxpx, int tx, int ty){
+    pair<double, double> interval;
+    interval.first =  (tr(lgx/2, tx) / unitaxpx * unitax + 1);
+    interval.second = (lgx - tr(lgx/2, tx))/unitaxpx * unitax + 1;
+
+    return (interval.second + interval.first) < 80;
+}
+
+pair<double, double> drawaxes (int lgx, int lgy,  double &unitax, int &unitaxpx, int tx, int ty)
 {
     char sir[1000] = {};
     double k=unitax;
+    pair<double, double> interval;
 
     if(unitaxpx >= 80){
         unitaxpx = 40;
@@ -73,140 +84,260 @@ void drawaxes (int a, int b, int lgx, int lgy,  double &unitax, int &unitaxpx, i
     }
 
 ///axele de coordonate
-    line(tr(lgx/2, tx), 0, tr(lgx/2,tx), lgy);
-    line(0, tr(lgy/2,   ty), lgx, tr(lgy/2,ty));
+    interval.first = -(tr(lgx/2, tx) / unitaxpx * unitax + 1);
+    interval.second = (lgx - tr(lgx/2, tx))/unitaxpx * unitax + 1;
 
+
+
+    if(userSettings.minor_gridlines || userSettings.axis_arrows) {
 ///impartirea si notarea axelor
-    for(int i=lgx/2+unitaxpx; tr(i,   tx)<=lgx; i+=unitaxpx)
-    {
-        line(tr(i,   tx), tr(lgy/2-3,   ty), tr(i,   tx), tr(lgy/2+3, ty));
-        nrsir(k, sir);
-        outtextxy(tr(i, tx), tr(lgy/2+3, ty), sir);
-        k += unitax;
+        for (int i = lgx / 2 + unitaxpx; tr(i, tx) <= lgx; i += unitaxpx) {
+            if(userSettings.axis_arrows)
+                line(tr(i, tx), tr(lgy / 2 - 3, ty), tr(i, tx), tr(lgy / 2 + 3, ty));
+            if(userSettings.minor_gridlines) {
+                setcolor(COLOR(96, 69, 69));
+                line(tr(i, tx), 0, tr(i, tx), lgy);
+                setcolor(WHITE);
+            }
+            if (userSettings.axis_numbers) {
+                nrsir(k, sir);
+                outtextxy(tr(i, tx), tr(lgy / 2 + 3, ty), sir);
+
+            }
+            k += unitax;
+        }
+
+
+        k = -unitax;
+        for (int i = lgx / 2 - unitaxpx; tr(i, tx) >= 0; i -= unitaxpx) {
+            if(userSettings.axis_arrows)
+                line(tr(i, tx), tr(lgy / 2 - 3, ty), tr(i, tx), tr(lgy / 2 + 3, ty));
+            if(userSettings.minor_gridlines) {
+                setcolor(COLOR(96, 69, 69));
+                line(tr(i, tx), 0, tr(i, tx), lgy);
+                setcolor(WHITE);
+            }
+            if (userSettings.axis_numbers) {
+                nrsir(k, sir);
+                outtextxy(tr(i, tx), tr(lgy / 2 + 3, ty), sir);
+
+            }
+            k -= unitax;
+        }
+
+
+        k = -unitax;
+        for (int i = lgy / 2 + unitaxpx; tr(i, ty) <= lgy; i += unitaxpx) {
+            if(userSettings.axis_arrows)
+                line(tr(lgx / 2 - 3, tx), tr(i, ty), tr(lgx / 2 + 3, tx), tr(i, ty));
+            if(userSettings.minor_gridlines) {
+                setcolor(COLOR(96, 69, 69));
+                line(0, tr(i, ty), lgx, tr(i, ty));
+                setcolor(WHITE);
+            }
+            if (userSettings.axis_numbers) {
+                nrsir(k, sir);
+                outtextxy(tr(lgx / 2 + 3, tx), tr(i, ty), sir);
+
+            }
+            k -= unitax;
+        }
+        k = unitax;
+        for (int i = lgy / 2 - unitaxpx; tr(i, ty) >= 0; i -= unitaxpx) {
+            if(userSettings.axis_arrows)
+                line(tr(lgx / 2 - 3, tx), tr(i, ty), tr(lgx / 2 + 3, tx), tr(i, ty));
+            if(userSettings.minor_gridlines) {
+                setcolor(COLOR(96, 69, 69));
+                line(0, tr(i, ty), lgx, tr(i, ty));
+                setcolor(WHITE);
+            }
+            if (userSettings.axis_numbers) {
+                nrsir(k, sir);
+                outtextxy(tr(lgx / 2 + 3, tx), tr(i, ty), sir);
+
+            }
+            k += unitax;
+        }
+        strcpy(sir, "0");
+        sir[1] = 0;
+        if (userSettings.axis_numbers) outtextxy(tr(lgx / 2 + 3, tx), tr(lgy / 2 + 3, ty), sir);
     }
-    k=-unitax;
-    for(int i=lgx/2-unitaxpx; tr(i,   tx)>=0; i-=unitaxpx)
-    {   line(tr(i,   tx), tr(lgy/2-3,   ty), tr(i,   tx), tr(lgy/2+3,   ty));
-        nrsir(k, sir);
-        outtextxy(tr(i,   tx), tr(lgy/2+3,   ty), sir);
-        k -= unitax;
+
+    if(userSettings.axis_arrows) {
+        line(tr(lgx / 2, tx), 0, tr(lgx / 2, tx), lgy);
+        line(tr(lgx / 2, tx) + 1, 0, tr(lgx / 2, tx) + 1, lgy);
+        line(tr(lgx / 2, tx) - 1, 0, tr(lgx / 2, tx) - 1, lgy);
+
+        line(0, tr(lgy / 2, ty), lgx, tr(lgy / 2, ty));
+        line(0, tr(lgy / 2, ty) + 1, lgx, tr(lgy / 2, ty) + 1);
+        line(0, tr(lgy / 2, ty) - 1, lgx, tr(lgy / 2, ty) - 1);
     }
-    k=-unitax;
-    for(int i=lgy/2+unitaxpx; tr(i,   ty)<=lgy; i+=unitaxpx)
-    {   line(tr(lgx/2-3, tx), tr(i,   ty), tr(lgx/2+3, tx), tr(i,   ty));
-        nrsir(k, sir);
-        outtextxy(tr(lgx/2+3, tx), tr(i,   ty), sir);
-        k -= unitax;
-    }
-    k=unitax;
-    for(int i=lgy/2-unitaxpx; tr(i,   ty)>=0; i-=unitaxpx)
-    {   line(tr(lgx/2-3, tx), tr(i,   ty), tr(lgx/2+3, tx), tr(i,   ty));
-        nrsir(k, sir);
-        outtextxy(tr(lgx/2+3, tx), tr(i,   ty), sir);
-        k += unitax;
-    }
-    outtextxy(tr(lgx/2+3, tx), tr(lgy/2+3,   ty), "0");
+
+    return interval;
 
 }
 
-///Functie temporara pentru teste
-double func(double n, vector<string> postfix)
+
+double func(double n, double start,double finish)
 {
-    return getValueFromPostfix(postfix,n);
+    if(userSettings.measure=="degrees")
+        n = n*(180.0/M_PI);
+    return getValueFromPostfix(postfix,n,start, finish);
 }
+
+enum{
+    CONSTANT,
+    RISING,
+    FALLING
+};
 
 ///Deseneaza functie pe intervalul [a, b] intr-o fereastra de dimensiuni lgx, lgy
-void drawf (int a, int b, double &unitax, int &unitaxpx, int lgx, int lgy, int tx, int ty,vector<string> postfix) {
+void drawf (double &unitax, int &unitaxpx, int lgx, int lgy, int tx, int ty) {
+    char go_back[100],zoom_in[100],zoom_out[100],controls[100];
+    strcpy(go_back, language["go_back"].c_str());
+    strcpy(zoom_in, language["zoom_in"].c_str());
+    strcpy(zoom_out, language["zoom_out"].c_str());
+    strcpy(controls, language["controls"].c_str());
 
-    cleardevice();
-    drawaxes(a, b, lgx, lgy, unitax, unitaxpx, tx, ty);
+    clearviewport();
+    pair<double, double> aux = drawaxes(lgx, lgy, unitax, unitaxpx, tx, ty);
+    int a = (int)aux.first;
+    int b = (int)aux.second;
 
+    int state;
 
     ///desenarea graficului
-    double x1 = lgx / 2 + (a / unitax) * unitaxpx;
-    double y1 = lgy / 2 - (func(a,postfix) / unitax) * unitaxpx;
-    double x2 = lgx / 2 + ((a + unitf) / unitax) * unitaxpx;
-    double y2 = lgy / 2 - (func(a + unitf,postfix) / unitax) * unitaxpx;
+    double x1 = (double)lgx / 2 + (a / (double)unitax) * (double)unitaxpx;
+    double y1 = (double)lgy / 2 - (func(a,a,b) / (double)unitax) * (double)unitaxpx;
+    double x2 = (double)lgx / 2 + ((a + unitf) / (double)unitax) * (double)unitaxpx;
+    double y2 = (double)lgy / 2 - (func(a + unitf,a,b) / (double)unitax) * (double)unitaxpx;
+
+    //double dif1 = (y2-y1)/(x2-x1);
+
+    setcolor(WHITE);
+
+    if(y1 < y2) {
+        state = FALLING;
+    }
+
+    else if(y1 > y2){
+        state = RISING;
+    }
+
+    else{
+        state = CONSTANT;
+    }
+
+    x1 = x2;
+    y1 = y2;
+
+
+
+//    double tmp = func(0,a,b) * 2;
+//    cout << tmp << '\n';
+    //return;
 
     for (double j = a + 2 * unitf; j <= b; j += unitf) {
-        double x3 = (j / unitax) * unitaxpx + lgx / 2;
-        double y3 = lgy / 2 - (func(j,postfix) / unitax) * unitaxpx;
+        x2 = (j / (double)unitax) * (double)unitaxpx + (double)lgx / 2;
+        y2 = (double)lgy / 2 - (func(j,a,b) / (double)unitax) * (double)unitaxpx;
 
-        if (!((y1 > lgy && y2 < 0) || (y2 > lgy && y1 < 0))) {
-            line(tr(x1, tx), tr(y1, ty),
-                 tr(x2, tx), tr(y2, ty));
+        if(state == RISING){
+            if(y1 < y2){
+                if(abs(y1 - y2) > lgy/2){
+                    if(tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) line(tr(x1, tx), tr(y1, ty), tr(x1, tx), 0);
+                    if(tr(y2, ty) >= 0 && tr(y2, ty) <= lgy) line(tr(x2, tx), tr(y2, ty), tr(x2, tx), lgy);
+                }
 
-            if (y2 < y1 && y2 < y3)
-                circle(tr(x2, tx), tr(y2, ty), 5);
-            if (y2 > y1 && y2 > y3)
-                circle(tr(x2, tx), tr(y2, ty), 5);
+                else{
+                    state = FALLING;
+                    if(tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) circle(tr(x1, tx), tr(y1, ty), 5);
+                    if((tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) || (tr(y2, ty) >= 0 && tr(y2, ty) <= lgy)) line(tr(x1, tx), tr(y1, ty), tr(x2, tx), tr(y2, ty));
+                }
+            }
+
+            else{
+                if((tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) || (tr(y2, ty) >= 0 && tr(y2, ty) <= lgy)) line(tr(x1, tx), tr(y1, ty), tr(x2, tx), tr(y2, ty));
+            }
+        }
+
+        if(state == FALLING){
+            if(y1 > y2){
+                if(abs(y1- y2) > lgy/2){
+                    if(tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) line(tr(x1, tx), tr(y1, ty), tr(x1, tx), lgy);
+                    if(tr(y2, ty) >= 0 && tr(y2, ty) <= lgy) line(tr(x2, tx), tr(y2, ty), tr(x2, tx), 0);
+                }
+
+                else{
+                    state = RISING;
+                    if(tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) circle(tr(x1, tx), tr(y1, ty), 5);
+                    if((tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) || (tr(y2, ty) >= 0 && tr(y2, ty) <= lgy)) line(tr(x1, tx), tr(y1, ty), tr(x2, tx), tr(y2, ty));
+                }
+            }
+
+            else{
+                if((tr(y1, ty) >= 0 && tr(y1, ty) <= lgy) || (tr(y2, ty) >= 0 && tr(y2, ty) <= lgy)) line(tr(x1, tx), tr(y1, ty), tr(x2, tx), tr(y2, ty));
+            }
         }
 
         x1 = x2;
         y1 = y2;
-        x2 = x3;
-        y2 = y3;
-
+        //dif = abs(y1 - y2);
     }
+    setcolor(COLOR(104, 137, 255));
+    char func[100]="f(x)=";
+    strcat(func, cppVersion.c_str());
+    outtextxy(20,690, func);
+    setcolor(RED);
+    outtextxy(20, 700, go_back);
+    outtextxy(20, 710, zoom_in);
+    outtextxy(20, 720, zoom_out);
+    outtextxy(20, 730, controls);
+    setcolor(WHITE);
 }
-void drawGraph(vector<string> postfix)
+void drawGraph()
 {
-
-    /**
-     * TODO: Inputul trebuie mutat pe partea grafica
-     * TODO: Trebuie realizata desenarea functiei dupa modelul cu initgraph
-     * BUG: Butonu de back e inutil momentan.
-     */
-    int a = -100, b = 100;
+    cleardevice();
     char ch;
     double unitax = 1;
     int unitaxpx = 40;
     int tx = 0, ty = 0;
-//    cout<<"Marginea inferioara a intervalului:"; cin>>a;
-//    cout<<"Marginea superioara a intervalului:"; cin>>b;
 
-    initwindow(850, 850);
-    drawf(a, b, unitax, unitaxpx, 850, 850,  tx, ty, postfix);
+    //settextstyle(10, 0, 0);
+
+    drawf(unitax, unitaxpx, maxWidth, maxHeigh,  tx, ty);
     do
     {
+        bool redraw = true;
         ch=getch();
-        cout << (int)ch << '\n';
+        if(ch=='x')
+            break;
         switch(ch)
         {
-            case 'n':
-                //zoom=zoom+0.1;
+            case 'i':
                 unitaxpx += 5;
-                drawf(a, b, unitax, unitaxpx, 850, 850,  tx, ty, postfix);
                 break;
-            case 'm':
-                unitaxpx -= 5;
-                //zoom=zoom-0.1;
-                drawf(a, b, unitax, unitaxpx, 850, 850,  tx, ty, postfix);
+            case 'o':
+                if(canZoomOut(maxWidth, maxHeigh, unitax, unitaxpx, tx, ty)) unitaxpx -= 5;
+                else redraw = false;
                 break;
             case 'w':
-            case KEY_UP://72 :
                 ty=ty-30;
-                drawf(a, b, unitax, unitaxpx, 850, 850,  tx, ty, postfix);
                 break;
             case 's':
-            case KEY_DOWN://80 :
                 ty=ty+30;
-                drawf(a, b, unitax, unitaxpx, 850, 850,  tx, ty, postfix);
                 break;
             case 'a':
-            case KEY_LEFT://75 :
                 tx=tx-30;
-                drawf(a, b, unitax, unitaxpx, 850, 850,  tx, ty, postfix);
                 break;
             case 'd':
-            case KEY_RIGHT://77 :
                 tx=tx+30;
-                drawf(a, b, unitax, unitaxpx, 850, 850,  tx, ty, postfix);
                 break;
+            default:
+                continue;
         }
+        if(redraw) drawf(unitax, unitaxpx, maxWidth, maxHeigh,  tx, ty);
     } while(ch!='x');
-    closegraph();
+    postfix.clear();
+    values.clear();
 
-
-//    closegraph();
 }

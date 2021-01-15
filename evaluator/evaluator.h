@@ -5,6 +5,7 @@
 #include "tokenize.h"
 #include "postfixValidator.h"
 using namespace std;
+extern unordered_map<double, double> values;
 
 /**
  * Getting the postfix version and validate it
@@ -12,4 +13,4 @@ using namespace std;
  */
 vector<string> buildAndValidatePostfix(string);
 string getCPPNotation(vector<string>);
-double getValueFromPostfix(vector<string>, double);
+double getValueFromPostfix(vector<string>,double,double,double);

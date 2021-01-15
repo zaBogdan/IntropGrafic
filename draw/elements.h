@@ -9,7 +9,7 @@ extern int isShiftUp;
 
 bool inFocus(coord center,coord mouseInput,int, int);
 void drawButton(int , int,coord, char text[20],int, int font_size=2, int active=0);
-void textInputBar(coord, coord);
+void textInputBar(coord, coord,char);
 
 void inputText(int, int,int maxLength=50);
-void drawHugeText(coord, string);
+void drawHugeText(coord,string);

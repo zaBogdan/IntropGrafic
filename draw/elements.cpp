@@ -3,8 +3,6 @@
 //
 
 #include "elements.h"
-int isShiftUp = 0;
-char input[100] = " \0";
 int i=0;
 
 bool inFocus(coord center,coord mouseInput,int textW, int textH)
@@ -35,7 +33,8 @@ void drawButton(int x, int y,coord mouseInput, char text[20],int aPage,int font_
         line(x-textwidth(text)/2-10, y+defaultSizeY+textheight(text), x+textwidth(text)/2+10, y+defaultSizeY+textheight(text));
         if((ismouseclick(WM_LBUTTONDOWN) || ismouseclick(WM_RBUTTONDOWN)) && focus)
         {
-            cout << "[BUTTON] Active page set to: " << aPage << endl;
+            if(DEBUG==true)
+                cout << "[BUTTON] Active page set to: " << aPage << endl;
             activePage = aPage;
         }
 
@@ -52,30 +51,67 @@ void drawButton(int x, int y,coord mouseInput, char text[20],int aPage,int font_
     settextstyle(0,0, 0);
 }
 
-void textInputBar(coord start, coord mouse)
+void textInputBar(coord start, coord mouse, char key)
 {
-//    char warning[] = "Warning! You are in input mode! To leave please press `esc` or if you want to finish press `enter`.";
-//    char explain[] = "Being in input mode means that you can't do anything else!";
-//    outtextxy(start.x+30,start.y-50, warning);
-//    outtextxy(start.x+30,start.y-30, explain);
-    rectangle(start.x, start.y, start.x+600, start.y+50);
+    int trasholdX=400;
+    int trasholdY=30;
+    settextstyle(0,0,2);
+    if(strlen(input))
+        outtextxy(start.x-trasholdX+10, start.y, input);
+    settextstyle(0,0,0);
+    char enter_input[100], warning_input[100],explain_input[100];
+    strcpy(enter_input, language["enter_input"].c_str());
+    strcpy(warning_input, language["warning_input"].c_str());
+    strcpy(explain_input, language["explain_input"].c_str());
+
+    rectangle(start.x-trasholdX, start.y-trasholdY,start.x+trasholdX,start.y+trasholdY);
+    if(inFocus(start,mouse,800,60) && (ismouseclick(WM_LBUTTONDOWN) || ismouseclick(WM_RBUTTONDOWN)))
+    {
+        setfillstyle(XHATCH_FILL, BLACK);
+        bar(start.x-textwidth(enter_input)/2-20,start.y-70,start.x+textwidth(enter_input)/2+20, start.y-45);
+        setcolor(WHITE);
+        outtextxy(start.x-textwidth(warning_input)/2,start.y-70, warning_input);
+        outtextxy(start.x-textwidth(explain_input)/2,start.y-60, explain_input);
+    }
+    else
+    {
+        outtextxy(start.x-textwidth(enter_input)/2,start.y-60, enter_input);
+        return;
+    }
+
+
     setcolor(WHITE);
     settextstyle(0,0,2);
-    if(kbhit())
+    if(strlen(input)<i)
+        i=0;
+
+    char ch='0';
+    while((int)ch!=27)
     {
-        char ch = getch();
-        cout << (int)ch << endl;
-        if(ch==-31)
-            ch=15;
+         ch = getch();
+        if((int)ch==27)
+        {
+            clearviewport();
+            outtextxy(start.x-trasholdX+10, start.y, input);
+            break;
+        }
+        if (ch == -31 || ch == -27)
+            ch = 15;
         if(ch==13)
+        {
+            if(i)
+                needsModified=true;
             return;
+        }
+
         if(i>maxLength)
             return;
         //backspace check
         if(ch==8)
         {
             input[--i]='\0';
-            clearviewport();
+            setfillstyle(XHATCH_FILL, BLACK);
+            bar(start.x-trasholdX+10, start.y-20, start.x+trasholdX-10,start.y+20);
         }
         //ordinary chars check
         else if(ch!=15)
@@ -108,8 +144,23 @@ void textInputBar(coord start, coord mouse)
             //if we pressed shift we will handle this next time
             isShiftUp=1;
         }
-        cout << "Shift is now: " << isShiftUp << endl;
-        cout << "[INPUT] Your string is: "<< input << endl;
-        outtextxy(start.x+10, start.y+20, input);
+        if(DEBUG==true)
+        {
+            cout << "[INPUT] Shift is now: " << isShiftUp << endl;
+            cout << "[INPUT] Your string is: "<< input << endl;
+        }
+        outtextxy(start.x-trasholdX+10, start.y, input);
     }
+}
+
+void drawHugeText(coord pos,string text)
+{
+    int width = maxWidth-100;
+    char ctext[750];
+    strcpy(ctext, text.c_str());
+    int len = textwidth(ctext);
+    int val = len/width;
+    //to be done..
+
+    cout << len << endl;
 }

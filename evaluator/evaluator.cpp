@@ -1,4 +1,5 @@
 #include "evaluator.h"
+unordered_map<double, double> values;
 
 vector<string> buildAndValidatePostfix(string func)
 {
@@ -88,8 +89,15 @@ string getCPPNotation(vector<string> postfix)
     return s.top();
 }
 
-double getValueFromPostfix(vector<string> postfix, double x)
+double getValueFromPostfix(vector<string> postfix, double x,double start,double finish)
 {
+    if(values[x])
+    {
+        if(DEBUG==true)
+            cout << "[Caching] Already calculed value for " << x << " returning.\n";
+        return values[x];
+    }
+
     map<string, function<double(double,double)>> funcs2 = {
             {"pow", [](double x, double y){return pow(x,y);}},
             {"fmod", [](double x,double y){return fmod(x,y);}},
@@ -151,7 +159,6 @@ double getValueFromPostfix(vector<string> postfix, double x)
                 double left = s.top();
                 s.pop();
                 s.push(funcs2[val](left,right));
-
             }
         }
         else
@@ -159,10 +166,17 @@ double getValueFromPostfix(vector<string> postfix, double x)
             double aval = atof(val.c_str());
             if(val[0]=='e' && val.length()==1)
                 aval = M_E;
-            if(val[0]=='p' && val[1]=='i' && val.length()==2)
-                aval = M_PI;
+            if(val.length()==1 && aval==0)
+                aval=1;
             s.push(aval);
         }
     }
-    return s.top();
+    if(DEBUG==true)
+        cout << "[Caching] New value added for " << x << " to the vector!\n";
+    if(s.top()>=LLONG_MIN && s.top()<=LLONG_MAX)
+    {
+        values[x] = s.top();
+        return s.top();
+    }
+    return 0;
 }

@@ -3,13 +3,12 @@
 //
 #pragma once
 #include "../setup.h"
-#include "main.h"
-//int  unitaxpx=30;
-const double unitf=0.01;
+const double unitf=0.1;
 
-void nrsir (double n, char s[]);
-void drawaxes (int a, int b, int lgx, int lgy,  double &unitax, int &unitaxpx, int tx, int ty);
-void drawf (int a, int b, double &unitax, int &unitaxpx, int lgx, int lgy, int tx, int ty,vector<string> postfix); ///Deseneaza functie pe intervalul [a, b] intr-o fereastra de dimensiuni lgx, lgy
-double tr(int coord, int translare); /// translate for a point with a zoom
-void drawGraph(vector<string> postfix);
+void nrsir (double, char s[]);
+double func(double,double,double);
+pair<double, double> drawaxes(int, int,double&, int&, int, int);
+void drawf (double&, int&, int, int, int, int);
+double tr(int, int);
+void drawGraph();
 
