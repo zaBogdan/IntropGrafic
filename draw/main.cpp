@@ -24,7 +24,7 @@ int gameLoop(coord mouse, char key)
         informationPage(mouse);
     //go to input function(s) page
     if(activePage==1)
-        inputFunction(mouse, key);
+        inputFunction(mouse);
     if(activePage==4)
         drawPage(mouse);
 
@@ -60,7 +60,6 @@ void graphic()
 //            IDK WHY THIS MUST BE HERE????
         }
         //get keyboard input
-        keyBoardInput=kbhit();
         if(needsModified && activePage==1)
         {
             needsModified=false;

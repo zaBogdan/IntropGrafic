@@ -51,7 +51,7 @@ void drawButton(int x, int y,coord mouseInput, char text[20],int aPage,int font_
     settextstyle(0,0, 0);
 }
 
-void textInputBar(coord start, coord mouse, char key)
+void textInputBar(coord start, coord mouse)
 {
     int trasholdX=400;
     int trasholdY=30;
@@ -151,16 +151,4 @@ void textInputBar(coord start, coord mouse, char key)
         }
         outtextxy(start.x-trasholdX+10, start.y, input);
     }
-}
-
-void drawHugeText(coord pos,string text)
-{
-    int width = maxWidth-100;
-    char ctext[750];
-    strcpy(ctext, text.c_str());
-    int len = textwidth(ctext);
-    int val = len/width;
-    //to be done..
-
-    cout << len << endl;
 }

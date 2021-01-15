@@ -101,11 +101,6 @@ double getValueFromPostfix(vector<string> postfix, double x,double start,double 
 
     map<string, function<double(double,double)>> funcs2 = {
             {"pow", [](double x, double y){return pow(x,y);}},
-            {"fmod", [](double x,double y){return fmod(x,y);}},
-            {"fdim", [](double x,double y){return fdim(x,y);}},
-            {"fmax", [](double x,double y){return fmax(x,y);}},
-            {"fmin", [](double x,double y){return fmin(x,y);}},
-            {"hypot", [](double x,double y){return hypot(x,y);}},
             {"+", [](double x,double y){return (x+y);}},
             {"-", [](double x,double y){return (x-y);}},
             {"/", [](double x,double y){return (x/y);}},
@@ -176,20 +171,17 @@ double getValueFromPostfix(vector<string> postfix, double x,double start,double 
 
     if(!isNumber(s.top()))
     {
-        cout << "[EVAL] Not valid output for " << x << " raising an error!\n";
+        if(DEBUG==true)
+            cout << "[EVAL] Not valid output for " << x << " raising an error!\n";
         errorFlagDrawing=1;
         val = 0;
     }
     else if(s.top()>DBL_MAX)
     {
-        cout << "[EVAL] Detected overflow!\n";
+        if(DEBUG==true)
+            cout << "[EVAL] Detected overflow!\n";
         val = DBL_MAX;
     }
-    else
-    {
-//        val = ((int)(s.top()*10000+.5)/10000.0);
-    }
-    cout << s.top() << ' ' << val << endl;
     if(DEBUG==true)
         cout << "[Caching] New value "<< val << " added for " << x << " to the vector!\n";
     if(!errorFlagDrawing)

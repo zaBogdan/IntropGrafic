@@ -10,5 +10,4 @@ void mainMenuPage(coord);
 void settingsPage(coord);
 void informationPage(coord);
 void drawPage(coord mouse);
-void inputFunction(coord,char);
-char* stringtochar(string);
+void inputFunction(coord);

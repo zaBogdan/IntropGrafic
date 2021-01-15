@@ -1,6 +1,4 @@
 #pragma once
-#include <map>
-#include <functional>
 #include "../setup.h"
 #include "tokenize.h"
 #include "postfixValidator.h"
