@@ -14,3 +14,4 @@ extern unordered_map<double, double> values;
 vector<string> buildAndValidatePostfix(string);
 string getCPPNotation(vector<string>);
 double getValueFromPostfix(vector<string>,double,double,double);
+bool isNumber(double);

@@ -91,6 +91,7 @@ string getCPPNotation(vector<string> postfix)
 
 double getValueFromPostfix(vector<string> postfix, double x,double start,double finish)
 {
+    errorFlagDrawing=0;
     if(values[x])
     {
         if(DEBUG==true)
@@ -107,7 +108,7 @@ double getValueFromPostfix(vector<string> postfix, double x,double start,double 
             {"hypot", [](double x,double y){return hypot(x,y);}},
             {"+", [](double x,double y){return (x+y);}},
             {"-", [](double x,double y){return (x-y);}},
-            {"/", [](double x,double y){if(y==0) return 0.0; return (x/y);}},
+            {"/", [](double x,double y){return (x/y);}},
             {"*", [](double x,double y){return (x*y);}},
             {"^", [](double x,double y){return pow(x,y);}},
     };
@@ -128,7 +129,7 @@ double getValueFromPostfix(vector<string> postfix, double x,double start,double 
             {"cbrt", [](double x){return cbrt(x);}},
             {"abs", [](double x){return abs(x);}},
             {"tanh", [](double x){return tanh(x);}},
-            {"log", [](double x){if(x>0) return log(x); return 0.0;}},
+            {"log", [](double x){return log(x);}},
             {"floor", [](double x){return floor(x);}}
     };
     int dummyVal=0;
@@ -171,12 +172,32 @@ double getValueFromPostfix(vector<string> postfix, double x,double start,double 
             s.push(aval);
         }
     }
-    if(DEBUG==true)
-        cout << "[Caching] New value added for " << x << " to the vector!\n";
-    if(s.top()>=LLONG_MIN && s.top()<=LLONG_MAX)
+    double val = s.top();
+
+    if(!isNumber(s.top()))
     {
-        values[x] = s.top();
-        return s.top();
+        cout << "[EVAL] Not valid output for " << x << " raising an error!\n";
+        errorFlagDrawing=1;
+        val = 0;
     }
-    return 0;
+    else if(s.top()>DBL_MAX)
+    {
+        cout << "[EVAL] Detected overflow!\n";
+        val = DBL_MAX;
+    }
+    else
+    {
+//        val = ((int)(s.top()*10000+.5)/10000.0);
+    }
+    cout << s.top() << ' ' << val << endl;
+    if(DEBUG==true)
+        cout << "[Caching] New value "<< val << " added for " << x << " to the vector!\n";
+    if(!errorFlagDrawing)
+        values[x] = val;
+    return val;
+}
+
+bool isNumber(double x)
+{
+    return isfinite(x);
 }

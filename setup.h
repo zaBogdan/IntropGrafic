@@ -5,9 +5,11 @@
 #include <stack>
 #include <cstring>
 #include <map>
+#include <climits>
+#include <cfloat>
 #include <unordered_map>
 #define SDL_MAIN_HANDLED
-#define DEBUG false
+#define DEBUG true
 #include <graphics.h>
 #ifndef __TYPES_H
 #define __TYPES_H
@@ -28,3 +30,4 @@ typedef std::map<std::string, std::string> langCore;
 #include "evaluator/evaluator.h"
 #include "draw/main.h"
 using namespace std;
+extern int errorFlagDrawing;

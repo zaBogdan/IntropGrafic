@@ -53,9 +53,11 @@ vector<string> applyTokenRules(vector<string> tokens)
     int dummyLen=0;
     for(int i=0;i<tokens.size();i++) {
         string workingValue = tokens[i];
+
         if (workingValue[0] == '-' && workingValue.length() == 1
             && (isOperand(tokens[i + 1].c_str(), 0, dummyLen) || isMathFunction(tokens[i+1],1,dummyLen))
             && ((i-1>=0 && !(isOperand(tokens[i-1],0,dummyLen) || isMathFunction(tokens[i-1],1,dummyLen))) || i-1<0)
+            && (i-1>=0 && tokens[i-1][tokens[i-1].length()-1]!=')' && tokens[i-1][tokens[i-1].length()-1]!=']' )
             && !visited[i])
         {
             if (DEBUG == true)
