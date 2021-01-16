@@ -3,36 +3,48 @@ unordered_map<double, double> values;
 
 vector<string> buildAndValidatePostfix(string func)
 {
-    cout << "[EVAL] The function is: " << func << endl;
+    if(DEBUG==true)
+        cout << "[EVAL] The function is: " << func << endl;
     vector<string> tokenizedFunction = tokenizeFunction(func);
     if(tokenizedFunction.empty())
     {
-        cout << "[EVAL] The function can't be tokenized!";
+        if(DEBUG==true)
+            cout << "[EVAL] The function can't be tokenized!";
         return vector<string>();
     }
-    cout << "[EVAL] Tokenized function is: ";
-    for(auto i: tokenizedFunction)
-        cout << i << ", ";
-    cout << endl;
+    if(DEBUG==true)
+    {
+        cout << "[EVAL] Tokenized function is: ";
+        for(auto i: tokenizedFunction)
+            cout << i << ", ";
+        cout << endl;
+    }
+
     vector<string> postfix = getPostfix(tokenizedFunction);
     if(postfix.empty())
     {
-        cout << "[EVAL] The function can't be transformed into postfix!";
+        if(DEBUG==true)
+            cout << "[EVAL] The function can't be transformed into postfix!";
         return vector<string>();
     }
-    cout << "[EVAL] The postfix version of this function is: ";
-    for(auto i: postfix)
-        cout << i << ", ";
-    cout << endl;
+    if(DEBUG==true)
+    {
+        cout << "[EVAL] The postfix version of this function is: ";
+        for(auto i: postfix)
+            cout << i << ", ";
+        cout << endl;
+    }
 
     bool valid = validatePostix(postfix);
 
     if(!valid)
     {
-        cout << "[EVAL] This function isn't valid! Please try again!\n";
+        if(DEBUG==true)
+            cout << "[EVAL] This function isn't valid! Please try again!\n";
         return vector<string>();
     }
-    cout << "[EVAL] The postfix notation is valid and ready to be evaluated!\n";
+    if(DEBUG==true)
+        cout << "[EVAL] The postfix notation is valid and ready to be evaluated!\n";
     return postfix;
 }
 
