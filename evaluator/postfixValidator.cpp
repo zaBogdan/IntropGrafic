@@ -98,6 +98,8 @@ bool isMathematicalFunction(string t)
 {
     if(t[0]=='-')
         t=t.substr(1, t.length()-1);
+    if(t.length()<=2)
+        return false;
     for(int i=0;i<mathFunctionsCounter;i++)
         if(!strcmp(mathematicalFunctions[i], t.c_str()))
             return true;

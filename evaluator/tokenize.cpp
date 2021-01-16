@@ -55,7 +55,7 @@ vector<string> applyTokenRules(vector<string> tokens)
         string workingValue = tokens[i];
 
         if (workingValue[0] == '-' && workingValue.length() == 1
-            && (isOperand(tokens[i + 1].c_str(), 0, dummyLen) || isMathFunction(tokens[i+1],1,dummyLen))
+            && (isOperand(tokens[i + 1].c_str(), 0, dummyLen) || isMathFunction(tokens[i+1],0,dummyLen))
             && ((i-1>=0 && !(isOperand(tokens[i-1],0,dummyLen) || isMathFunction(tokens[i-1],1,dummyLen))) || i-1<0)
             && (i-1>=0 && tokens[i-1][tokens[i-1].length()-1]!=')' && tokens[i-1][tokens[i-1].length()-1]!=']' )
             && !visited[i])
@@ -169,6 +169,8 @@ bool isOperand(string f, int i, int& len)
 bool isMathFunction(string f, int i, int& len)
 {
     int start = i;
+    if(f[i]=='|')
+        start++;
     while(i<f.length() && f[i]!='(')
         i++;
     int finish = i;
